@@ -361,7 +361,7 @@ class PointSet3
       auto h_num_elems = h->numElements();
       auto h_elems = h->getElements();
       avg_separation = 0;
-      intx num_trials = std::min(100L, h_num_elems);
+      intx num_trials = std::min(static_cast<intx>(100), h_num_elems);
       for (intx i = 0; i < num_trials; ++i)
       {
         auto index = Random::common().integer(0, (int32)h_num_elems - 1);

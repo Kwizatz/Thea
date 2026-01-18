@@ -30,7 +30,6 @@
 #include "Common.hpp"
 #include "MatVec.hpp"
 #include "SplineN.hpp"
-
 namespace Thea {
 
 /**
@@ -118,7 +117,7 @@ class /* THEA_API */ BezierN : public SplineN<N, T>
     VectorT eval(T const & t, intx deriv_order) const
     {
       alwaysAssertM(t >= -0.00001 && t <= 1.00001, format("BezierN: Curve parameter %lf out of range", static_cast<double>(t)));
-      alwaysAssertM(deriv_order >= 0, format("BezierN: Invalid derivative order %ld", deriv_order));
+      alwaysAssertM(deriv_order >= 0, format("BezierN: Invalid derivative order %td", deriv_order));
 
       intx order = getOrder();
       if (deriv_order > order) return VectorT::Zero();

@@ -324,7 +324,7 @@ loadSamples(string const & path, Array<Vector3> & positions, Array<string> & lin
   lines.clear();
 
   string line;
-  Vector3 p, n;
+  Vector3 p;
   while (getline(in, line))
   {
     line = trimWhitespace(line);

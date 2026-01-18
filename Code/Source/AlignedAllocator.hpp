@@ -18,6 +18,16 @@
 #include "Platform.hpp"
 #include <cstdlib>
 
+// MinGW doesn't provide std::aligned_alloc even in C++17 mode
+#if defined(THEA_WINDOWS) && (defined(__MINGW32__) || defined(__MINGW64__))
+#  include <malloc.h>
+#  define THEA_ALIGNED_ALLOC(alignment, size) _aligned_malloc(size, alignment)
+#  define THEA_ALIGNED_FREE(ptr) _aligned_free(ptr)
+#else
+#  define THEA_ALIGNED_ALLOC(alignment, size) std::aligned_alloc(alignment, size)
+#  define THEA_ALIGNED_FREE(ptr) std::free(ptr)
+#endif
+
 namespace Thea {
 
 /**
@@ -60,10 +70,10 @@ class AlignedAllocator
     const_pointer address(const_reference r) const { return &r; }
 
     /** Allocate an aligned block of \a count objects. */
-    pointer allocate(size_type count) { return (pointer)std::aligned_alloc(Alignment, count * sizeof(value_type)); }
+    pointer allocate(size_type count) { return (pointer)THEA_ALIGNED_ALLOC(Alignment, count * sizeof(value_type)); }
 
     /** Deallocate an aligned block. */
-    void deallocate(pointer p, size_type count) { (void)count; std::free(p); }
+    void deallocate(pointer p, size_type count) { (void)count; THEA_ALIGNED_FREE(p); }
 
     /** Construct an object at a memory location. */
     void construct(pointer p, const value_type & val) { new (p) value_type(val); }

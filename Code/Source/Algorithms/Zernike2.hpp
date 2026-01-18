@@ -196,12 +196,11 @@ Zernike2::compute(IAddressableMatrix<T> const & distrib, double center_x, double
   intx nrows = distrib.rows();
 
   // Don't go outside the specified radius
-  intx min_x = std::max(0L,        (intx)std::ceil (center_x - radius));
-  intx max_x = std::min(ncols - 1, (intx)std::floor(center_x + radius));
+  intx min_x = std::max(static_cast<intx>(0), static_cast<intx>(std::ceil (center_x - radius)));
+  intx max_x = std::min(ncols - 1, static_cast<intx>(std::floor(center_x + radius)));
 
-  intx min_y = std::max(0L,        (intx)std::ceil (center_y - radius));
-  intx max_y = std::min(nrows - 1, (intx)std::floor(center_y + radius));
-
+  intx min_y = std::max(static_cast<intx>(0), static_cast<intx>(std::ceil (center_y - radius)));
+  intx max_y = std::min(nrows - 1, static_cast<intx>(std::floor(center_y + radius)));
   double r_radius = opts.lut_radius / radius;
 
   std::complex<double> x1, x2, x3;

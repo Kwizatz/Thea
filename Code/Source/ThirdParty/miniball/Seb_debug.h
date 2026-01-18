@@ -9,10 +9,10 @@
 #include <fstream>
 #include <map>
 #include <string>
-#if !defined(_MSC_VER)
+#if !defined(_WIN32)
 #include <sys/resource.h>
 #include <sys/time.h>
-#else
+#elif defined(_MSVC_VER)
 typedef struct timeval {
   long tv_sec;
   long tv_usec;

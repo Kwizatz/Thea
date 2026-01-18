@@ -74,6 +74,10 @@
 
 #if defined(THEA_MAC) && !defined(THEA_GL_OSMESA)
 #  include <OpenGL/OpenGL.h>  // required to pull in CGL, which OpenGL/gl.h does not
+#elif defined(_WIN32) && !defined(THEA_GL_OSMESA)
+#  define WIN32_LEAN_AND_MEAN
+#  include <windows.h>  // required to pull in WGL, which OpenGL/gl.h does not
+#  include <wingdi.h>  // required to pull in CGL, which OpenGL/gl.h does not
 #endif
 
 // GUI compatibility. Requires a display device.

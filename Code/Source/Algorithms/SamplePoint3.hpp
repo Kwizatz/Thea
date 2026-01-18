@@ -131,10 +131,10 @@ class SamplePoint3
     void clearNeighbors() { nbrs.clear(); }
 
   private:
-    intx index;        ///< Index of the sample.
-    Vector3 p;         ///< Sample position.
-    Vector3 n;         ///< Sample normal.
-    NeighborSet nbrs;  ///< Set of neighboring samples.
+    intx index{};        ///< Index of the sample.
+    Vector3 p{};         ///< Sample position.
+    Vector3 n{};         ///< Sample normal.
+    NeighborSet nbrs{};  ///< Set of neighboring samples.
 
 }; // class SamplePoint3
 

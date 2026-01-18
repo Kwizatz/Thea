@@ -17,15 +17,19 @@
 #include "../ICompressedSparseMatrix.hpp"
 #include "../ThirdParty/NNLS/nnls.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+#if defined(__clang__)
+#  pragma clang diagnostic push
+#  pragma clang diagnostic ignored "-Wunused-but-set-variable"
+#endif
 #  include <Eigen/IterativeLinearSolvers>
 #  include <Eigen/QR>
 #  include <Eigen/SparseCholesky>
 #  include <Eigen/SparseLU>
 #  include <Eigen/SparseQR>
 #  include <Eigen/SVD>
-#pragma clang diagnostic pop
+#if defined(__clang__)
+#  pragma clang diagnostic pop
+#endif
 
 #include <type_traits>
 

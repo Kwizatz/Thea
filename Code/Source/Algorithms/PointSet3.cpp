@@ -37,7 +37,7 @@ updateNeighborPointers(PointSet3::SampleArray & samples, PointSet3::SampleArray 
   for (size_t i = 0; i < samples.size(); ++i)
   {
     auto & nbrs = samples[i].getNeighbors();
-    for (int j = 0; j < nbrs.size(); ++j)
+    for (size_t j = 0; j < nbrs.size(); ++j)
     {
       size_t index = nbrs[j].getSample() - &src_samples[0];  // take advantage of array storage (this is NOT getIndex())
       theaAssertM(index >= 0 && index < samples.size(), "PointSet3: Can't get array index of neighboring sample");
@@ -132,7 +132,7 @@ class SamplePointerGraph
 // Callback for shortest paths algorithm.
 struct DijkstraCallback
 {
-  DijkstraCallback(PointSet3::Sample * sample_, intx num_orig_samples_, int max_nbrs_)
+  DijkstraCallback(PointSet3::Sample * sample_, intx num_orig_samples_, size_t max_nbrs_)
   : sample(sample_), num_orig_samples(num_orig_samples_), max_nbrs(max_nbrs_)
   {
     sample->getNeighbors().clear();
@@ -150,7 +150,7 @@ struct DijkstraCallback
 
   PointSet3::Sample * sample;
   intx num_orig_samples;
-  int max_nbrs;
+  size_t max_nbrs;
 };
 
 } // namespace PointSet3Internal
@@ -335,12 +335,12 @@ PointSet3::save(std::string const & graph_path, std::string const & samples_path
     auto const & nbrs = samples[i].getNeighbors();
     gout << nbrs.size();
 
-    for (int j = 0; j < nbrs.size(); ++j)
+    for (size_t j = 0; j < nbrs.size(); ++j)
       gout << ' ' << nbrs[j].getSample()->getIndex();
 
     if (write_distances)
     {
-      for (int j = 0; j < nbrs.size(); ++j)
+      for (size_t j = 0; j < nbrs.size(); ++j)
         gout << ' ' << nbrs[j].getSeparation();
     }
 

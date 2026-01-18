@@ -208,12 +208,12 @@ readFeaturesTXT(std::string const & path, intx num_points, Array< Array<Real> > 
   for (intx i = 0; i < num_points; ++i)
   {
     if (!std::getline(in, line))
-      throw Error(format("TXT: Could not read feature for point %ld", i) + " from '" + path + '\'');
+      throw Error(format("TXT: Could not read feature for point %td", i) + " from '" + path + '\'');
 
     std::istringstream line_in(line);
     if (has_point_prefix) line_in >> p[0] >> p[1] >> p[2];
     if (!(line_in >> f))
-      throw Error(format("TXT: Could not read first feature for point %ld", i) + " from '" + path + '\'');
+      throw Error(format("TXT: Could not read first feature for point %td", i) + " from '" + path + '\'');
 
     features[0][(size_t)i] = (Real)f;
 
@@ -230,7 +230,7 @@ readFeaturesTXT(std::string const & path, intx num_points, Array< Array<Real> > 
       for (size_t j = 1; j < features.size(); ++j)
       {
         if (!(line_in >> f))
-          throw Error(format("TXT: Could not read feature %ld for point %ld", (intx)j, i) + " from '" + path + '\'');
+          throw Error(format("TXT: Could not read feature %td for point %td", (intx)j, i) + " from '" + path + '\'');
 
         features[j][(size_t)i] = (Real)f;
       }
@@ -294,7 +294,7 @@ readFeaturesARFF(std::string const & path, intx num_points, Array< Array<Real> >
     do
     {
       if (!std::getline(in, line))
-        throw Error(format("ARFF: Could not read features for point %ld", i) + " from '" + path + '\'');
+        throw Error(format("ARFF: Could not read features for point %td", i) + " from '" + path + '\'');
 
       line = trimWhitespace(line);
     } while (line.empty());
@@ -310,7 +310,7 @@ readFeaturesARFF(std::string const & path, intx num_points, Array< Array<Real> >
     {
       std::istringstream field_in(fields[j]);
       if (!(field_in >> f))
-        throw Error(format("ARFF: Could not read feature %ld for point %ld", (intx)j, i) + " from '" + path + '\'');
+        throw Error(format("ARFF: Could not read feature %td for point %td", (intx)j, i) + " from '" + path + '\'');
 
       features[j][(size_t)i] = (Real)f;
     }
@@ -505,7 +505,7 @@ ColorRgba
 PointCloud::getColor(size_t point_index) const
 {
   alwaysAssertM(point_index >= 0 && point_index < points.size(),
-                format("%s: Index %ld out of bounds", getName(), (intx)point_index));
+                format("%s: Index %td out of bounds", getName(), (intx)point_index));
 
   if (!colors.empty())
   {

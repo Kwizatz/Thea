@@ -25,7 +25,6 @@
 
 #include <cmath>
 #include <cstring>
-
 namespace Thea {
 
 Polygon2::TriangulationOptions::TriangulationOptions()
@@ -146,7 +145,7 @@ Polygon2::triangulateInterior(Array<Vector2> & tri_verts, Array<intx> & tri_indi
                                );
 
   if (options.max_steiner_points >= 0)
-    opt_str += format("S%ld", options.max_steiner_points);
+    opt_str += format("S%td", options.max_steiner_points);
 
   if (!tri_vert_is_boundary)
     opt_str += "B";  // don't output boundary markers

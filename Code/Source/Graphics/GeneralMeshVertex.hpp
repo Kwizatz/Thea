@@ -390,14 +390,14 @@ class /* THEA_API */ GeneralMeshVertex
       dst.internal_bits = internal_bits;
     }
 
-    EdgeCollection edges;
-    FaceCollection faces;
-    intx index;
-    bool has_precomputed_normal;
-    float normal_normalization_factor;
-    mutable uint32 packing_index;
-    bool marked;
-    mutable unsigned char internal_bits;  // only for use by GeneralMesh
+    EdgeCollection edges{};
+    FaceCollection faces{};
+    intx index{};
+    bool has_precomputed_normal{};
+    float normal_normalization_factor{};
+    mutable uint32 packing_index{};
+    bool marked{};
+    mutable unsigned char internal_bits{};  // only for use by GeneralMesh
 
 }; // class GeneralMeshVertex
 

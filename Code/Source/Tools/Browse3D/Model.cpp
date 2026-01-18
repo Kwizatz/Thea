@@ -587,7 +587,7 @@ Model::loadSamples(std::string const & path_)
 
       Mesh::Face const * face = Mesh::mapIndexToFace(face_index);
       if (!face)
-        throw Error(format("Mesh face with index %ld not found", face_index));
+        throw Error(format("Mesh face with index %td not found", face_index));
 
       Mesh * mesh = face->attr().getParent();
 
@@ -596,7 +596,7 @@ Model::loadSamples(std::string const & path_)
       else
       {
         if (face->numVertices() < 3)
-          throw Error(format("Face %ld has %ld vertices", face->getIndex(), (long)face->numVertices()));
+          throw Error(format("Face %td has %td vertices", face->getIndex(), (intx)face->numVertices()));
 
         MeshFace::VertexConstIterator v2 = face->verticesBegin();
         MeshFace::VertexConstIterator v0 = v2; ++v2;
@@ -645,7 +645,7 @@ Model::saveSamples(std::string const & path_) const
     }
 
     if (face->numVertices() < 3)
-      throw Error(format("Face %ld has %ld vertices", face->getIndex(), (intx)face->numVertices()));
+      throw Error(format("Face %td has %td vertices", face->getIndex(), (intx)face->numVertices()));
 
     MeshFace::VertexConstIterator v2 = face->verticesBegin();
     MeshFace::VertexConstIterator v0 = v2; ++v2;
@@ -800,7 +800,7 @@ Model::promotePickedSegment(intx offset)
 
   intx min_depth = picked_segment.minDepth();
   if (min_depth >= 0 && segment_depth_promotion >= min_depth)
-    segment_depth_promotion = std::max(min_depth - 1, 0L);
+    segment_depth_promotion = std::max(min_depth - 1, static_cast<intx>(0));
 
   THEA_CONSOLE << getName() << ": Segment depth promotion set to " << segment_depth_promotion;
 
@@ -900,7 +900,7 @@ Model::loadSegments(std::string const & path_)
       {
         Mesh::Face const * face = Mesh::mapIndexToFace(face_index);
         if (!face)
-          throw Error(format("Mesh face with index %ld not found", face_index));
+          throw Error(format("Mesh face with index %td not found", face_index));
 
         Mesh * mesh = face->attr().getParent();
         seg.addMesh(mesh);

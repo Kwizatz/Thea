@@ -165,7 +165,7 @@ class /* THEA_DLL_LOCAL */ ParametricCurveNBase
 
       if (num_arc_samples < 0)
       {
-        intx curve_complexity = std::max(2L, std::max(numControls() - 1, getOrder()));
+        intx curve_complexity = std::max(static_cast<intx>(2), std::max(numControls() - 1, getOrder()));
         num_arc_samples = curve_complexity * 50;
       }
 

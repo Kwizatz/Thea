@@ -100,7 +100,7 @@ class /* THEA_API */ LockedOutputStream : public Noncopyable
 
 // Fully qualify references in #defines so they can be used in client programs in non-Thea namespaces without namespace errors.
 
-#define THEA_LOG_STANDARD_PREFIX Thea::format("[%s] %s:%ld: ", \
+#define THEA_LOG_STANDARD_PREFIX Thea::format("[%s] %s:%td: ", \
                                               Thea::LogInternal::currentDateTimeToString().c_str(), \
                                               Thea::LogInternal::stripPathFromFilename(__FILE__).c_str(), \
                                               (intx)__LINE__)

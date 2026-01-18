@@ -539,7 +539,7 @@ operator==(FaceSeq const & lhs, FaceSeq const & rhs)
 }
 
 template <>
-struct Hasher<FaceSeq>
+struct Thea::Hasher<FaceSeq>
 {
   size_t operator()(FaceSeq const & f) const
   {

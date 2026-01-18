@@ -283,7 +283,7 @@ testPointBvh()
   {
     THEA_CONSOLE << '\n' << num_nbrs << " pairs of nearest neighbors (max 3) found for query point set in "
                  << 1000 * timer.elapsedTime() << " ms:";
-    for (intx i = 0; i < nbrs.size(); ++i)
+    for (size_t i = 0; i < nbrs.size(); ++i)
     {
       THEA_CONSOLE << "  (" << new_bvh.getElements()[nbrs[i].getQueryIndex()].name << ' ' << toString(nbrs[i].getQueryPoint())
                    << ", " << bvh.getElements()[nbrs[i].getTargetIndex()].name << ' ' << toString(nbrs[i].getTargetPoint())

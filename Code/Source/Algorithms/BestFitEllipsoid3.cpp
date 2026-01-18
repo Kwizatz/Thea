@@ -16,13 +16,17 @@
 
 #if THEA_ENABLE_CGAL
 // sprintf in boost::lexical_cast triggers a deprecation warning
-#  pragma clang diagnostic push
-#  pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#  if defined(__clang__)
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#  endif
 #    include <CGAL/Cartesian.h>
 #    include <CGAL/MP_Float.h>
 #    include <CGAL/Approximate_min_ellipsoid_d.h>
 #    include <CGAL/Approximate_min_ellipsoid_d_traits_3.h>
-#  pragma clang diagnostic pop
+#  if defined(__clang__)
+#    pragma clang diagnostic pop
+#  endif
 #  include <algorithm>
 #endif
 

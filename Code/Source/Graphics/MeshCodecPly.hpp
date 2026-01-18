@@ -488,7 +488,7 @@ class CodecPly : public CodecPlyBase<MeshT>
                   if (index < 0 || index >= (intx)vrefs.size())
                   {
                     if (read_opts.strict)
-                      throw Error(getName() + format(": Vertex index %ld out of bounds (#vertices = %ld) on line '%s'",
+                      throw Error(getName() + format(": Vertex index %td out of bounds (#vertices = %td) on line '%s'",
                                                      index, (intx)vrefs.size(), line.c_str()));
                     else
                     {
@@ -647,7 +647,7 @@ class CodecPly : public CodecPlyBase<MeshT>
                   if (index < 0 || index >= (intx)vrefs.size())
                   {
                     if (read_opts.strict)
-                      throw Error(getName() + format(": Vertex index %ld out of bounds (#vertices = %ld) in face %ld",
+                      throw Error(getName() + format(": Vertex index %td out of bounds (#vertices = %td) in face %td",
                                                      index, (intx)vrefs.size(), num_faces));
                     else
                     {
@@ -663,7 +663,7 @@ class CodecPly : public CodecPlyBase<MeshT>
                     if (face[w] == face[v])  // face has repeated vertices
                     {
                       if (read_opts.strict)
-                        throw Error(getName() + format(": Face %ld has repeated vertices", num_faces));
+                        throw Error(getName() + format(": Face %td has repeated vertices", num_faces));
                       else
                       {
                         THEA_WARNING << getName() << ": Skipping face with repeated vertices";
@@ -726,12 +726,12 @@ class CodecPly : public CodecPlyBase<MeshT>
       if (binary) out.printf("format binary_little_endian 1.0\n");  // default to little-endian output
       else        out.printf("format ascii 1.0\n");
 
-      out.printf("element vertex %ld\n", num_vertices);
+      out.printf("element vertex %td\n", num_vertices);
       out.printf("property float x\n");  // stick to old typenames for compatibility
       out.printf("property float y\n");
       out.printf("property float z\n");
 
-      out.printf("element face %ld\n", num_faces);
+      out.printf("element face %td\n", num_faces);
       out.printf("property list int int vertex_indices\n");
 
       out.printf("end_header\n");

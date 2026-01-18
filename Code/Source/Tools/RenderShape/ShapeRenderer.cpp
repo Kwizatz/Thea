@@ -582,7 +582,7 @@ ShapeRendererImpl::exec(int argc, char ** argv)
           if (views.size() > 1)
           {
             path = FilePath::concat(FilePath::parent(path),
-                                    FilePath::baseName(path) + format("_%06ld.", (intx)v) + FilePath::completeExtension(path));
+                                    FilePath::baseName(path) + format("_%06td.", (intx)v) + FilePath::completeExtension(path));
           }
 
           color_image.save(path);
@@ -600,7 +600,7 @@ ShapeRendererImpl::exec(int argc, char ** argv)
             return -1;
           }
 
-          string suffix = (views.size() > 1 ? format("_%06ld.png", (intx)v) : ".png");
+          string suffix = (views.size() > 1 ? format("_%06td.png", (intx)v) : ".png");
           string depth_path = FilePath::concat(FilePath::parent(out_path), FilePath::baseName(out_path) + "_depth" + suffix);
 
           depth_image.save(depth_path);
@@ -618,7 +618,7 @@ ShapeRendererImpl::exec(int argc, char ** argv)
             return -1;
           }
 
-          string suffix = (views.size() > 1 ? format("_%06ld.png", (intx)v) : ".png");
+          string suffix = (views.size() > 1 ? format("_%06td.png", (intx)v) : ".png");
           string normal_path = FilePath::concat(FilePath::parent(out_path), FilePath::baseName(out_path) + "_normal" + suffix);
 
           normal_image.save(normal_path);
@@ -637,7 +637,7 @@ ShapeRendererImpl::exec(int argc, char ** argv)
             return -1;
           }
 
-          string suffix = (views.size() > 1 ? format("_%06ld.png", (intx)v) : ".png");
+          string suffix = (views.size() > 1 ? format("_%06td.png", (intx)v) : ".png");
           string id_path = FilePath::concat(FilePath::parent(out_path), FilePath::baseName(out_path) + "_id" + suffix);
 
           id_image.save(id_path);
@@ -664,7 +664,7 @@ ShapeRendererImpl::exec(int argc, char ** argv)
 
       render_system->popFramebuffer();
     }
-    THEA_CATCH(return -1;, ERROR, "Could not render view %ld of shape", (intx)v)
+    THEA_CATCH(return -1;, ERROR, "Could not render view %td of shape", (intx)v)
   }
 
   render_system->destroyTexture(tex3d);
@@ -2466,9 +2466,9 @@ modelBSphere(Model const & model, Matrix4 const & transform)
 Camera
 Model::fitCamera(Matrix4 const & transform, View const & view, Real zoom, int width, int height)
 {
-  Ball3 bsphere;
-  Vector3 center;
-  Real diameter;
+  Ball3 bsphere{};
+  Vector3 center{};
+  Real diameter{};
   if (!view.has_view_matrix || !view.has_proj_matrix)
   {
     bsphere = modelBSphere(*this, transform);

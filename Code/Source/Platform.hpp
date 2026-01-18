@@ -33,20 +33,22 @@
 #  define NDEBUG
 #endif
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 #  define THEA_WINDOWS 1
    // NOMINMAX required to stop windows.h messing up std::min
 #  ifndef NOMINMAX
 #    define NOMINMAX
 #  endif
 
-   // Disable pesky warnings of the type: "class <member-classname> needs to have dll-interface to be used by clients of class"
-   // and "non dll-interface class <subclass> used as base for dll-interface class <superclass>."
-#  pragma warning( disable: 4251 )
-#  pragma warning( disable: 4275 )
+#  ifdef _MSC_VER
+      // Disable pesky warnings of the type: "class <member-classname> needs to have dll-interface to be used by clients of class"
+      // and "non dll-interface class <subclass> used as base for dll-interface class <superclass>."
+#     pragma warning( disable: 4251 )
+#     pragma warning( disable: 4275 )
 
-   // Disable numerical type conversion "possible loss of precision" warnings
-#  pragma warning( disable: 4244 )
+      // Disable numerical type conversion "possible loss of precision" warnings
+#     pragma warning( disable: 4244 )
+#  endif
 
 #elif defined(__FreeBSD__)
 #  define THEA_FREEBSD 1

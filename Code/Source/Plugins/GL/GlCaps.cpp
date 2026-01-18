@@ -190,7 +190,7 @@ GlCaps::getDriverVersion()
 
     if (pVS->wValueLength)
     {
-      result = format("%d.%d.%d.%d",
+      result = format("%ld.%ld.%ld.%ld",
                       pValue->dwProductVersionMS >> 16,
                       pValue->dwProductVersionMS & 0xFFFF,
                       pValue->dwProductVersionLS >> 16,

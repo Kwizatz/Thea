@@ -28,6 +28,16 @@
 typedef int integer;
 typedef double doublereal;
 
+/* Forward Declarations */
+doublereal diff_(doublereal *x, doublereal *y);
+int h12_(
+integer *mode, integer *lpivot, integer *l1, integer *m,
+doublereal *u,
+integer *iue,
+doublereal *up, doublereal *c__,
+integer *ice, integer *icv, integer *ncv);
+int g1_(doublereal *a, doublereal *b, doublereal *cterm, doublereal *sterm, doublereal *sig);
+
 /* The following subroutine was added after the f2c translation */
 doublereal d_sign(doublereal *a, doublereal *b)
 {
@@ -107,15 +117,12 @@ integer *index, *mode;
     /* integer s_wsfe(), do_fio(), e_wsfe(); */
 
     /* Local variables */
-    extern doublereal diff_();
     static integer iter;
     static doublereal temp, wmax;
     static integer i__, j, l;
     static doublereal t, alpha, asave;
     static integer itmax, izmax, nsetp;
-    extern /* Subroutine */ int g1_();
     static doublereal dummy, unorm, ztest, cc;
-    extern /* Subroutine */ int h12_();
     static integer ii, jj, ip;
     static doublereal sm;
     static integer iz, jz;
@@ -498,8 +505,7 @@ L400:
 
 } /* nnls_ */
 
-/* Subroutine */ int g1_(a, b, cterm, sterm, sig)
-doublereal *a, *b, *cterm, *sterm, *sig;
+/* Subroutine */ int g1_(doublereal *a, doublereal *b, doublereal *cterm, doublereal *sterm, doublereal *sig)
 {
     /* System generated locals */
     doublereal d__1;
@@ -594,12 +600,12 @@ doublereal *a, *b, *cterm, *sterm, *sig;
 /*     NCV    NUMBER OF VECTORS IN C() TO BE TRANSFORMED. IF NCV .LE. 0 */
 /*            NO OPERATIONS WILL BE DONE ON C(). */
 /*     ------------------------------------------------------------------ */
-/* Subroutine */ int h12_(mode, lpivot, l1, m, u, iue, up, c__, ice, icv, ncv)
-integer *mode, *lpivot, *l1, *m;
-doublereal *u;
-integer *iue;
-doublereal *up, *c__;
-integer *ice, *icv, *ncv;
+/* Subroutine */ int h12_(
+integer *mode, integer *lpivot, integer *l1, integer *m,
+doublereal *u,
+integer *iue,
+doublereal *up, doublereal *c__,
+integer *ice, integer *icv, integer *ncv)
 {
     /* System generated locals */
     integer u_dim1, u_offset, i__1, i__2;
@@ -733,8 +739,7 @@ L130:
     return 0;
 } /* h12_ */
 
-doublereal diff_(x, y)
-doublereal *x, *y;
+doublereal diff_(doublereal *x, doublereal *y)
 {
     /* System generated locals */
     doublereal ret_val;

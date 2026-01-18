@@ -110,6 +110,15 @@ IF(WITH_CGAL AND Thea_FIND_CGAL)
       SET(Thea_DEPS_LIBRARY_DIRS ${Thea_DEPS_LIBRARY_DIRS} ${CGAL_LIBRARY_DIRS})
     ENDIF()
 
+    IF(CGAL_USE_GMP)
+      if(GMP_LIBRARY_RELEASE)
+        list(APPEND Thea_DEPS_LIBRARIES optimized ${GMP_LIBRARY_RELEASE})
+      endif()
+      if(GMP_LIBRARY_DEBUG)
+        list(APPEND Thea_DEPS_LIBRARIES debug ${GMP_LIBRARY_DEBUG})
+      endif()
+    ENDIF()
+
     # CGAL appends the directory containing its own CMake modules to the module search path. We shouldn't need it after this
     # point, so let's drop everything on the module path other than the first component.
     LIST(GET CMAKE_MODULE_PATH 0 CMAKE_MODULE_PATH)

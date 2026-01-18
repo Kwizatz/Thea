@@ -13,7 +13,6 @@
 //============================================================================
 
 #include "KMeans.hpp"
-
 namespace Thea {
 namespace Algorithms {
 
@@ -111,7 +110,7 @@ KMeans::Options::write(BinaryOutputStream & output, Codec const & codec, bool wr
 void
 KMeans::Options::write(TextOutputStream & output, Codec const & codec) const
 {
-  output.printf("max_iterations = %ld\n", max_iterations);
+  output.printf("max_iterations = %td\n", max_iterations);
   output.printf("max_time = %lg\n", max_time);
   output.printf("seeding = \"%s\"\n", seeding.toString().c_str());
   output.printf("parallelize = %s\n", (parallelize ? "true" : "false"));
@@ -220,7 +219,7 @@ KMeans::write(TextOutputStream & output, Codec const & codec) const
   intx num_clusters = numClusters();
   intx num_point_features = numPointFeatures();
 
-  output.printf("%ld %ld\n", num_clusters, num_point_features);
+  output.printf("%td %td\n", num_clusters, num_point_features);
 
   for (intx i = 0; i < num_clusters; ++i)
   {

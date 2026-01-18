@@ -19,6 +19,7 @@
 #include <cstddef>
 #include <iterator>
 #include <type_traits>
+#include <limits>
 
 namespace Thea {
 namespace Algorithms {

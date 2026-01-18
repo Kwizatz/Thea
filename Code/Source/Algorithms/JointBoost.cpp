@@ -975,8 +975,8 @@ JointBoost::Options::write(std::ostream & out) const
 bool
 JointBoost::Options::write(TextOutputStream & output) const
 {
-  output.printf("min_boosting_rounds = %ld\n", min_boosting_rounds);
-  output.printf("max_boosting_rounds = %ld\n", max_boosting_rounds);
+  output.printf("min_boosting_rounds = %td\n", min_boosting_rounds);
+  output.printf("max_boosting_rounds = %td\n", max_boosting_rounds);
   output.printf("min_fractional_error_reduction = %lg\n", min_fractional_error_reduction);
   output.printf("feature_sampling_fraction = %lg\n", feature_sampling_fraction);
   output.printf("max_thresholds_fraction = %lg\n", max_thresholds_fraction);

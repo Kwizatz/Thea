@@ -121,7 +121,7 @@ class Impl
           // Blend in the positions of nearby upwind points (the predecessor's visited neighbors) to make the estimate a bit
           // more robust
           auto const & pred_nbrs = pred->getNeighbors();
-          for (int i = 0; i < pred_nbrs.size(); ++i)
+          for (size_t i = 0; i < pred_nbrs.size(); ++i)
           {
             auto const & pred_nbr = pred_nbrs[i];
             ParamDataMap::const_iterator existing_nbr = param_data.find(pred_nbr.getSample());

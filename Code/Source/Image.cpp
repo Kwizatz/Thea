@@ -66,7 +66,10 @@ THEA_DEF_IMAGE_CODEC_FREEIMAGE(CodecBmp,    FIF_BMP,      0,  0)
 THEA_DEF_IMAGE_CODEC_FREEIMAGE(CodecCut,    FIF_CUT,      0,  0)
 THEA_DEF_IMAGE_CODEC_FREEIMAGE(CodecDds,    FIF_DDS,      0,  0)
 THEA_DEF_IMAGE_CODEC_FREEIMAGE(CodecExr,    FIF_EXR,      0,  0)
+#if 0
+// FreeImage 3.18.0 has deprecated the FaxG3 codec due to unmaintained/private external dependencies
 THEA_DEF_IMAGE_CODEC_FREEIMAGE(CodecFaxg3,  FIF_FAXG3,    0,  0)
+#endif
 THEA_DEF_IMAGE_CODEC_FREEIMAGE(CodecGif,    FIF_GIF,      0,  0)
 THEA_DEF_IMAGE_CODEC_FREEIMAGE(CodecHdr,    FIF_HDR,      0,  0)
 THEA_DEF_IMAGE_CODEC_FREEIMAGE(CodecIco,    FIF_ICO,      0,  0)
@@ -1052,8 +1055,8 @@ reorderChannels(Image & img, int const * order)
 
   typedef typename UInt<BitsPerChannel>::type ChannelT;
 
-  size_t const num_channels = static_cast<size_t>(img.numChannels());
-  for (size_t i = 0; i < num_channels; ++i)
+  int const num_channels = img.numChannels();
+  for (int i = 0; i < num_channels; ++i)
     if (order[i] < 0 || order[i] >= num_channels)
     {
       THEA_ERROR << "Image: Invalid channel index: order[" << i << "] = " << order[i];
@@ -1068,7 +1071,7 @@ reorderChannels(Image & img, int const * order)
       auto pixel = static_cast<ChannelT *>(img.getScanLine(j, i));
       for (int64 k = 0; k < width; ++k, pixel += num_channels)
       {
-        for (size_t c = 0; c < num_channels; ++c)
+        for (int c = 0; c < num_channels; ++c)
           reordered[c] = pixel[order[c]];
 
         std::memcpy(pixel, reordered, sizeof(ChannelT) * num_channels);

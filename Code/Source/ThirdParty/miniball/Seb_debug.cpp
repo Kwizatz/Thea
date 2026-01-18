@@ -4,7 +4,7 @@
 //          Kaspar Fischer <kf@iaeth.ch>
 
 #include <cmath>
-#if !defined(_MSC_VER)
+#if !defined(_WIN32)
 #include <sys/resource.h>
 #include <sys/time.h>
 #endif
@@ -98,7 +98,7 @@ namespace SEB_NAMESPACE {
 
   void Timer::start(const char *timer_name)
   {
-#if !defined(_MSC_VER)
+#if !defined(_WIN32)
     // fetch current usage:
     rusage now;
     int status = getrusage(RUSAGE_SELF,&now);
@@ -112,7 +112,7 @@ namespace SEB_NAMESPACE {
 
   float Timer::lapse(const char *name)
   {
-#if !defined(_MSC_VER)
+#if !defined(_WIN32)
     // assert that start(name) has been called before:
     SEB_ASSERT(timers.find(std::string(name)) != timers.end());
 

@@ -1135,11 +1135,11 @@ HoughForest::Options::write(BinaryOutputStream & output, Codec const & codec, bo
 void
 HoughForest::Options::write(TextOutputStream & output, Codec const & codec) const
 {
-  output.printf("max_depth = %ld\n", max_depth);
-  output.printf("max_leaf_elements = %ld\n", max_leaf_elements);
-  output.printf("max_candidate_features = %ld\n", max_candidate_features);
-  output.printf("num_feature_expansions = %ld\n", num_feature_expansions);
-  output.printf("max_candidate_thresholds = %ld\n", max_candidate_thresholds);
+  output.printf("max_depth = %td\n", max_depth);
+  output.printf("max_leaf_elements = %td\n", max_leaf_elements);
+  output.printf("max_candidate_features = %td\n", max_candidate_features);
+  output.printf("num_feature_expansions = %td\n", num_feature_expansions);
+  output.printf("max_candidate_thresholds = %td\n", max_candidate_thresholds);
   output.printf("min_class_uncertainty = %lg\n", min_class_uncertainty);
   output.printf("max_dominant_fraction = %lg\n", max_dominant_fraction);
   output.printf("probabilistic_sampling = %s\n", (probabilistic_sampling ? "true" : "false"));
@@ -1159,7 +1159,7 @@ HoughForest::HoughForest(intx num_classes_, intx num_features_, intx const * num
   for (intx i = 0; i < num_classes_; ++i)
   {
     alwaysAssertM(num_vote_params_[i] >= 1,
-                  format("HoughForest: Can't create Hough forest with no Hough vote parameters for class %ld", i));
+                  format("HoughForest: Can't create Hough forest with no Hough vote parameters for class %td", i));
   }
 }
 
@@ -1209,7 +1209,7 @@ HoughForest::autoSelectUnspecifiedOptions(Options & opts_, TrainingData const & 
   }
 
   if (opts_.max_candidate_thresholds < 0)
-    opts_.max_candidate_thresholds = std::max(5L, (intx)std::ceil(training_data.numExamples() / 1000.0));
+    opts_.max_candidate_thresholds = std::max(static_cast<intx>(5), static_cast<intx>(std::ceil(training_data.numExamples() / 1000.0)));
 
   if (opts_.min_class_uncertainty < 0)  // we don't need to check max_dominant_fraction, it's not directly used anywhere
   {
@@ -1229,7 +1229,7 @@ HoughForest::train(intx num_trees, TrainingData const & training_data)
   for (intx i = 0; i < num_classes; ++i)
   {
     alwaysAssertM(training_data.numVoteParameters(i) == numVoteParameters(i),
-                  format("HoughForest: Training data has different number of vote parameters for class %ld", i));
+                  format("HoughForest: Training data has different number of vote parameters for class %td", i));
   }
 
   THEA_CONSOLE << "HoughForest: Training forest with " << num_trees << " tree(s)";

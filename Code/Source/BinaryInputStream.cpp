@@ -55,6 +55,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
+#include <cstdint>
 
 THEA_INSTANTIATE_SMART_POINTERS(Thea::BinaryInputStream)
 
@@ -458,7 +459,7 @@ BinaryInputStream::readUInt64()
 std::string
 BinaryInputStream::readString(int64 n)
 {
-  alwaysAssertM(n >= 0, format("BinaryInputStream: Cannot read a negative-length string (%ld)", (intx)n));
+  alwaysAssertM(n >= 0, format("BinaryInputStream: Cannot read a negative-length string (%td)", (intx)n));
 
   if (n == 0)
     return std::string();

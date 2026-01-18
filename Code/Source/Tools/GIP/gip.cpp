@@ -9,6 +9,7 @@
 #include <utility>
 
 #define __NO_STD_VECTOR // Use cl::vector instead of STL version
+#define CL_TARGET_OPENCL_VERSION 300
 #ifdef __APPLE__
 #  include <OpenCL/opencl.h>
 #else

@@ -556,8 +556,8 @@
 extern "C" {
 #endif
 
-/* SC: defs for Visual C++ */
-#ifdef _MSC_VER
+/* SC: defs for Windows */
+#ifdef _WIN32
 typedef unsigned char u_char;
 typedef unsigned short u_short;
 typedef unsigned int u_int;

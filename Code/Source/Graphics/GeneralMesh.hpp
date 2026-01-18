@@ -1971,9 +1971,9 @@ class /* THEA_API */ GeneralMesh : public NamedObject, public virtual IMesh
     typedef Array<Vector2>    TexCoordArray;  ///< Array of texture coordinates.
     typedef Array<uint32>     IndexArray;     ///< Array of indices.
 
-    FaceCollection    faces;         ///< Set of mesh faces.
-    VertexCollection  vertices;      ///< Set of mesh vertices.
-    EdgeCollection    edges;         ///< Set of mesh edges.
+    FaceCollection    faces{};         ///< Set of mesh faces.
+    VertexCollection  vertices{};      ///< Set of mesh vertices.
+    EdgeCollection    edges{};         ///< Set of mesh edges.
 
     intx max_vertex_index;    ///< The largest index of a vertex in the mesh.
     intx max_face_index;      ///< The largest index of a face in the mesh.

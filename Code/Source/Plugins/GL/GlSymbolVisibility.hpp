@@ -46,7 +46,7 @@
 // - Remember to test your library thoroughly afterwards, including that all exceptions correctly traverse shared object
 //   boundaries.
 //
-#ifdef _MSC_VER  // should be WIN32?
+#ifdef _WIN32
 #    define THEA_GL_IMPORT  __declspec(dllimport)
 #    define THEA_GL_EXPORT  __declspec(dllexport)
 #    define THEA_GL_DLL_LOCAL

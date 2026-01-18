@@ -856,7 +856,7 @@ class /* THEA_API */ BvhN
       {
         static intx const MIN_ACCEL_SAMPLES = 10;
 
-        num_acceleration_samples_ = std::min(250L, (intx)std::ceil(0.1 * numElements()));
+        num_acceleration_samples_ = std::min(static_cast<intx>(250), static_cast<intx>(std::ceil(0.1 * numElements())));
         accelerate_nn_queries = (num_acceleration_samples_ >= MIN_ACCEL_SAMPLES);
       }
       else
