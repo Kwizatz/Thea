@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cmath>
 #include <cfloat>
+#include <array>
 
 #include "hull.h"
 
@@ -2121,8 +2122,8 @@ ConvexH *ConvexHCrop(ConvexH &convex,const Plane &slice)
 
 static int candidateplane(Plane *planes,int planes_count,ConvexH *convex,float epsilon)
 {
-	int p ;
-	REAL md;
+	int p{};
+	REAL md{};
 	int i;
 	for(i=0;i<planes_count;i++)
 	{
@@ -2927,7 +2928,7 @@ bool  HullLibrary::CleanupVertices(unsigned int svcount,
 
 	vcount = 0;
 
-	float recip[3];
+	std::array<float, 3> recip{};
 
 	if ( scale )
 	{

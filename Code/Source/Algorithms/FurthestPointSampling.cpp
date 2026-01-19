@@ -22,6 +22,7 @@
 #include <cmath>
 #include <functional>
 #include <iomanip>
+#include <cinttypes>
 
 namespace Thea {
 namespace Algorithms {
@@ -51,7 +52,7 @@ FurthestPointSampling::subsample(intx num_orig_points, Vector3 const * orig_poin
 {
   alwaysAssertM(num_desired_points >= 0, "FurthestPointSampling: Can't sample a negative number of points");
   alwaysAssertM(num_orig_points >= num_desired_points,
-                format("FurthestPointSampling: Can't subsample %td point(s) from %td point(s)",
+                format("FurthestPointSampling: Can't subsample %" PRIdPTR " point(s) from %" PRIdPTR " point(s)",
                        num_desired_points, num_orig_points));
   alwaysAssertM(dist_type == DistanceType::GEODESIC, "FurthestPointSampling: Only geodesic distances currently supported");
 

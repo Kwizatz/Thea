@@ -25,14 +25,18 @@
 #include "../ThirdParty/BloomenthalPolygonizer/polygonizer.h"
 
 #if THEA_ENABLE_CGAL
+#if defined(__clang__)
 // sprintf in boost::lexical_cast triggers a deprecation warning
 #  pragma clang diagnostic push
 #  pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #    include <CGAL/Surface_mesh_default_triangulation_3.h>
 #    include <CGAL/Complex_2_in_triangulation_3.h>
 #    include <CGAL/Implicit_surface_3.h>
 #    include <CGAL/make_surface_mesh.h>
+#if defined(__clang__)
 #  pragma clang diagnostic pop
+#endif
 #endif
 
 namespace Thea {

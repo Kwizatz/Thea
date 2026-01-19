@@ -24,6 +24,7 @@
 #include "../MatVec.hpp"
 #include "../HyperplaneN.hpp"
 #include <Eigen/SVD>
+#include <cinttypes>
 namespace Thea {
 namespace Algorithms {
 
@@ -287,7 +288,7 @@ class Icp3
         intx index = to.template closestElement<MetricL2>(PointTraitsN<FromT, 3, ScalarT>::getPosition(from[i]), -1,
                                                           UniversalCompatibility(), nullptr, &to_points[i]);
         if (index < 0)
-          throw Error(format("Icp3: Couldn't get nearest neighbor of source point %td", i));
+          throw Error(format("Icp3: Couldn't get nearest neighbor of source point %" PRIdPTR, i));
       }
 
       return alignOneStep(from_num_pts, from, from_weight_func, from_sym_plane, to_points, to_sym_plane);
@@ -396,7 +397,7 @@ class Icp3
         intx index = to.template closestElement<MetricL2>(PointTraitsN<FromT, 3, ScalarT>::getPosition(from[i]), -1,
                                                           UniversalCompatibility(), nullptr, &to_points[i]);
         if (index < 0)
-          throw Error(format("Icp3: Couldn't get nearest neighbor of source point %td", i));
+          throw Error(format("Icp3: Couldn't get nearest neighbor of source point %" PRIdPTR, i));
       }
 
       return measureError(tr, from_num_pts, from, from_weight_func, to_points);

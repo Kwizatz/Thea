@@ -13,6 +13,7 @@
 
 #include "Polygon2.hpp"
 #include "Polygon3.hpp"
+#include <cinttypes>
 
 // Be careful not to use NumericType::REAL after this!!!
 #ifdef SINGLE
@@ -145,7 +146,7 @@ Polygon2::triangulateInterior(Array<Vector2> & tri_verts, Array<intx> & tri_indi
                                );
 
   if (options.max_steiner_points >= 0)
-    opt_str += format("S%td", options.max_steiner_points);
+    opt_str += format("S%" PRIdPTR, options.max_steiner_points);
 
   if (!tri_vert_is_boundary)
     opt_str += "B";  // don't output boundary markers

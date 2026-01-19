@@ -22,7 +22,7 @@
 #include "MeshGroup.hpp"
 #include "MeshCodec.hpp"
 #include <algorithm>
-
+#include <cinttypes>
 namespace Thea {
 
 namespace CodecOffInternal {
@@ -175,7 +175,7 @@ class CodecOff : public CodecOffBase<MeshT>
           output.writeInt32(0);  // num_edges
         }
         else
-          output.printf("OFF\n%td %td 0\n", num_vertices, num_faces);
+          output.printf("OFF\n%" PRIdPTR " %" PRIdPTR " 0\n", num_vertices, num_faces);
 
         writeVertices(mesh_group, output, vertex_indices, callback);
 
@@ -288,7 +288,7 @@ class CodecOff : public CodecOffBase<MeshT>
             if (index < 0 || index >= (intx)vrefs.size())
             {
               if (read_opts.strict)
-                throw Error(getName() + format(": Vertex index %td out of bounds (#vertices = %td) on line '%s'",
+                throw Error(getName() + format(": Vertex index %" PRIdPTR " out of bounds (#vertices = %" PRIdPTR ") on line '%s'",
                                                index, (intx)vrefs.size(), line.c_str()));
               else
               {
@@ -391,7 +391,7 @@ class CodecOff : public CodecOffBase<MeshT>
             if (index < 0 || index >= (intx)vrefs.size())
             {
               if (read_opts.strict)
-                throw Error(getName() + format(": Vertex index %td out of bounds (#vertices = %td) in face %td",
+                throw Error(getName() + format(": Vertex index %" PRIdPTR " out of bounds (#vertices = %" PRIdPTR ") in face %" PRIdPTR,
                                                index, (intx)vrefs.size(), f));
               else
               {
@@ -407,7 +407,7 @@ class CodecOff : public CodecOffBase<MeshT>
               if (face[w] == face[v])  // face has repeated vertices
               {
                 if (read_opts.strict)
-                  throw Error(getName() + format(": Face %td has repeated vertices", f));
+                  throw Error(getName() + format(": Face %" PRIdPTR " has repeated vertices", f));
                 else
                 {
                   THEA_WARNING << getName() << ": Skipping face " << f << " with repeated vertices";

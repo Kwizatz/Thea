@@ -101,11 +101,11 @@ static integer c__2 = 2;
 /*             3    ITERATION COUNT EXCEEDED.  MORE THAN 3*N ITERATIONS. */
 
 /*     ------------------------------------------------------------------ */
-/* Subroutine */ int nnls_(a, mda, m, n, b, x, rnorm, w, zz, index, mode)
-doublereal *a;
-integer *mda, *m, *n;
-doublereal *b, *x, *rnorm, *w, *zz;
-integer *index, *mode;
+/* Subroutine */ int nnls_(
+doublereal *a,
+integer *mda, integer *m, integer *n,
+doublereal *b, doublereal *x, doublereal *rnorm, doublereal *w, doublereal *zz,
+integer *index, integer *mode)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;

@@ -33,6 +33,7 @@
 #include <cstdio>
 #include <fstream>
 #include <limits>
+#include <cinttypes>
 
 wxDEFINE_EVENT(EVT_MODEL_PATH_CHANGED,         wxCommandEvent);
 wxDEFINE_EVENT(EVT_MODEL_GEOMETRY_CHANGED,     wxCommandEvent);
@@ -587,7 +588,7 @@ Model::loadSamples(std::string const & path_)
 
       Mesh::Face const * face = Mesh::mapIndexToFace(face_index);
       if (!face)
-        throw Error(format("Mesh face with index %td not found", face_index));
+        throw Error(format("Mesh face with index %" PRIdPTR " not found", face_index));
 
       Mesh * mesh = face->attr().getParent();
 
@@ -596,7 +597,7 @@ Model::loadSamples(std::string const & path_)
       else
       {
         if (face->numVertices() < 3)
-          throw Error(format("Face %td has %td vertices", face->getIndex(), (intx)face->numVertices()));
+          throw Error(format("Face %" PRIdPTR " has %" PRIdPTR " vertices", face->getIndex(), (intx)face->numVertices()));
 
         MeshFace::VertexConstIterator v2 = face->verticesBegin();
         MeshFace::VertexConstIterator v0 = v2; ++v2;
@@ -645,7 +646,7 @@ Model::saveSamples(std::string const & path_) const
     }
 
     if (face->numVertices() < 3)
-      throw Error(format("Face %td has %td vertices", face->getIndex(), (intx)face->numVertices()));
+      throw Error(format("Face %" PRIdPTR " has %" PRIdPTR " vertices", face->getIndex(), (intx)face->numVertices()));
 
     MeshFace::VertexConstIterator v2 = face->verticesBegin();
     MeshFace::VertexConstIterator v0 = v2; ++v2;
@@ -900,7 +901,7 @@ Model::loadSegments(std::string const & path_)
       {
         Mesh::Face const * face = Mesh::mapIndexToFace(face_index);
         if (!face)
-          throw Error(format("Mesh face with index %td not found", face_index));
+          throw Error(format("Mesh face with index %" PRIdPTR " not found", face_index));
 
         Mesh * mesh = face->attr().getParent();
         seg.addMesh(mesh);

@@ -20,6 +20,7 @@
 #include <cstring>
 #include <fstream>
 #include <stack>
+#include <cinttypes>
 
 #define THEA_HOUGH_SYMMETRIC_VARIANCE
 
@@ -1135,11 +1136,11 @@ HoughForest::Options::write(BinaryOutputStream & output, Codec const & codec, bo
 void
 HoughForest::Options::write(TextOutputStream & output, Codec const & codec) const
 {
-  output.printf("max_depth = %td\n", max_depth);
-  output.printf("max_leaf_elements = %td\n", max_leaf_elements);
-  output.printf("max_candidate_features = %td\n", max_candidate_features);
-  output.printf("num_feature_expansions = %td\n", num_feature_expansions);
-  output.printf("max_candidate_thresholds = %td\n", max_candidate_thresholds);
+  output.printf("max_depth = %" PRIdPTR "\n", max_depth);
+  output.printf("max_leaf_elements = %" PRIdPTR "\n", max_leaf_elements);
+  output.printf("max_candidate_features = %" PRIdPTR "\n", max_candidate_features);
+  output.printf("num_feature_expansions = %" PRIdPTR "\n", num_feature_expansions);
+  output.printf("max_candidate_thresholds = %" PRIdPTR "\n", max_candidate_thresholds);
   output.printf("min_class_uncertainty = %lg\n", min_class_uncertainty);
   output.printf("max_dominant_fraction = %lg\n", max_dominant_fraction);
   output.printf("probabilistic_sampling = %s\n", (probabilistic_sampling ? "true" : "false"));
@@ -1159,7 +1160,7 @@ HoughForest::HoughForest(intx num_classes_, intx num_features_, intx const * num
   for (intx i = 0; i < num_classes_; ++i)
   {
     alwaysAssertM(num_vote_params_[i] >= 1,
-                  format("HoughForest: Can't create Hough forest with no Hough vote parameters for class %td", i));
+                  format("HoughForest: Can't create Hough forest with no Hough vote parameters for class %" PRIdPTR, i));
   }
 }
 
@@ -1229,7 +1230,7 @@ HoughForest::train(intx num_trees, TrainingData const & training_data)
   for (intx i = 0; i < num_classes; ++i)
   {
     alwaysAssertM(training_data.numVoteParameters(i) == numVoteParameters(i),
-                  format("HoughForest: Training data has different number of vote parameters for class %td", i));
+                  format("HoughForest: Training data has different number of vote parameters for class %" PRIdPTR, i));
   }
 
   THEA_CONSOLE << "HoughForest: Training forest with " << num_trees << " tree(s)";

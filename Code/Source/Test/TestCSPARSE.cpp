@@ -11,6 +11,7 @@
 #include <cmath>
 #include <iostream>
 #include <cstdio>
+#include <cinttypes>
 
 using namespace std;
 using namespace Thea;
@@ -87,7 +88,7 @@ testCSPARSE(int argc, char * argv[])
     double const * sols = ls->getSolution();
     for (intx i = 0; i < ls->dims(); ++i)
     {
-      printf("  x[%td] = %g (expected %g)\n", (intx)i, sols[i], expected[i]);
+      printf("  x[%" PRIxPTR "] = %g (expected %g)\n", (intx)i, sols[i], expected[i]);
 
       double allowed_error = std::max(1e-10, EPSILON * expected[i]);
       if (std::fabs(sols[i] - expected[i]) > allowed_error)

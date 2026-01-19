@@ -35,6 +35,7 @@
 #include <limits>
 #include <sstream>
 #include <utility>
+#include <cinttypes>
 
 using namespace std;
 using namespace Thea;
@@ -582,7 +583,7 @@ ShapeRendererImpl::exec(int argc, char ** argv)
           if (views.size() > 1)
           {
             path = FilePath::concat(FilePath::parent(path),
-                                    FilePath::baseName(path) + format("_%06td.", (intx)v) + FilePath::completeExtension(path));
+                                    FilePath::baseName(path) + format("_%06" PRIdPTR ".", (intx)v) + FilePath::completeExtension(path));
           }
 
           color_image.save(path);
@@ -600,7 +601,7 @@ ShapeRendererImpl::exec(int argc, char ** argv)
             return -1;
           }
 
-          string suffix = (views.size() > 1 ? format("_%06td.png", (intx)v) : ".png");
+          string suffix = (views.size() > 1 ? format("_%06" PRIdPTR ".png", (intx)v) : ".png");
           string depth_path = FilePath::concat(FilePath::parent(out_path), FilePath::baseName(out_path) + "_depth" + suffix);
 
           depth_image.save(depth_path);
@@ -618,7 +619,7 @@ ShapeRendererImpl::exec(int argc, char ** argv)
             return -1;
           }
 
-          string suffix = (views.size() > 1 ? format("_%06td.png", (intx)v) : ".png");
+          string suffix = (views.size() > 1 ? format("_%06" PRIdPTR ".png", (intx)v) : ".png");
           string normal_path = FilePath::concat(FilePath::parent(out_path), FilePath::baseName(out_path) + "_normal" + suffix);
 
           normal_image.save(normal_path);
@@ -637,7 +638,7 @@ ShapeRendererImpl::exec(int argc, char ** argv)
             return -1;
           }
 
-          string suffix = (views.size() > 1 ? format("_%06td.png", (intx)v) : ".png");
+          string suffix = (views.size() > 1 ? format("_%06" PRIdPTR ".png", (intx)v) : ".png");
           string id_path = FilePath::concat(FilePath::parent(out_path), FilePath::baseName(out_path) + "_id" + suffix);
 
           id_image.save(id_path);
@@ -664,7 +665,7 @@ ShapeRendererImpl::exec(int argc, char ** argv)
 
       render_system->popFramebuffer();
     }
-    THEA_CATCH(return -1;, ERROR, "Could not render view %td of shape", (intx)v)
+    THEA_CATCH(return -1;, ERROR, "Could not render view %" PRIdPTR " of shape", (intx)v)
   }
 
   render_system->destroyTexture(tex3d);
