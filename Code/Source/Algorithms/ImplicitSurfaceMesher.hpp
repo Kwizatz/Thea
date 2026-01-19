@@ -30,10 +30,11 @@
 #  pragma clang diagnostic push
 #  pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
-#    include <CGAL/Surface_mesh_default_triangulation_3.h>
-#    include <CGAL/Complex_2_in_triangulation_3.h>
-#    include <CGAL/Implicit_surface_3.h>
-#    include <CGAL/make_surface_mesh.h>
+#    include <CGAL/Mesh_triangulation_3.h>
+#    include <CGAL/Mesh_complex_3_in_triangulation_3.h>
+#    include <CGAL/Mesh_criteria_3.h>
+#    include <CGAL/Labeled_mesh_domain_3.h>
+#    include <CGAL/make_mesh_3.h>
 #if defined(__clang__)
 #  pragma clang diagnostic pop
 #endif
@@ -79,10 +80,9 @@ class THEA_API ImplicitSurfaceMesher
     /** Evaluates function as required by CGAL implicit surface wrapper. */
     template <typename FunctorT> struct CgalEval
     {
-      typedef CGAL::Surface_mesh_default_triangulation_3 Tr;
-      typedef Tr::Geom_traits GT;
-      typedef GT::Point_3 Point_3;
-      typedef GT::FT FT;
+      typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
+      typedef K::Point_3 Point_3;
+      typedef K::FT FT;
 
       FunctorT * func;
 
@@ -93,9 +93,6 @@ class THEA_API ImplicitSurfaceMesher
       FT operator()(Point_3 const & p) const { return static_cast<FT>((*func)(Vector3(p.x(), p.y(), p.z()))); }
 
     }; // CgalEval
-
-    typedef CGAL::Surface_mesh_default_triangulation_3  Tr;
-    typedef CGAL::Complex_2_in_triangulation_3<Tr>      C2t3;
 
 #endif // THEA_ENABLE_CGAL
 
@@ -205,7 +202,7 @@ class THEA_API ImplicitSurfaceMesher
 
     /**
      * Polygonize the zero level set of a 3D function to a mesh, using the method of Boissonnat and Oudot [2005] as implemented
-     * by the CGAL library (http://www.cgal.org/Manual/latest/doc_html/cgal_manual/Surface_mesher/Chapter_main.html)
+     * by the CGAL library (http://www.cgal.org/Manual/latest/doc_html/cgal_manual/Mesh_3/Chapter_main.html)
      *
      *   Jean-Daniel Boissonnat and Steve Oudot, "Provably good sampling and meshing of surfaces", Graphical Models, 67:405-451,
      *   2005.
@@ -219,35 +216,40 @@ class THEA_API ImplicitSurfaceMesher
     static void meshBoissonnatOudot(FunctorT * surface_functor, Ball3 const & bounding_ball,
                                     Options::BoissonnatOudot const & options, MeshT & result)
     {
-      typedef Tr::Geom_traits                                     GT;
-      typedef GT::Sphere_3                                        Sphere_3;
-      typedef GT::Point_3                                         Point_3;
-      typedef GT::FT                                              FT;
-      typedef CGAL::Implicit_surface_3< GT, CgalEval<FunctorT> >  Surface_3;
+      typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
+      typedef K::FT                                               FT;
+      typedef K::Point_3                                          Point_3;
+      typedef K::Sphere_3                                         Sphere_3;
+      typedef CGAL::Labeled_mesh_domain_3<K>                      Mesh_domain;
+      typedef CGAL::Mesh_triangulation_3<Mesh_domain>::type       Tr;
+      typedef CGAL::Mesh_complex_3_in_triangulation_3<Tr>         C3t3;
+      typedef CGAL::Mesh_criteria_3<Tr>                           Mesh_criteria;
 
-      Tr tr;                                     // 3D Delaunay triangulation
-      C2t3 c2t3(tr);                             // 2D complex in 3D Delaunay triangulation
       CgalEval<FunctorT> func(surface_functor);  // CGAL-style wrapper to evaluate the function
 
-      // Define the surface
+      // Define the bounding sphere
       Vector3 const & center = bounding_ball.getCenter();
       Real radius = bounding_ball.getRadius();
-      Sphere_3 sph(Point_3(static_cast<FT>(center.x()), static_cast<FT>(center.y()), static_cast<FT>(center.z())),
-                   static_cast<FT>(radius * radius));
-      Surface_3 surface(func, sph);
+      Sphere_3 bounding_sphere(Point_3(static_cast<FT>(center.x()), static_cast<FT>(center.y()), static_cast<FT>(center.z())),
+                                static_cast<FT>(radius * radius));
+
+      // Create domain from implicit function
+      Mesh_domain domain = Mesh_domain::create_implicit_mesh_domain(func, bounding_sphere);
 
       // Define meshing criteria
-      CGAL::Surface_mesh_default_criteria_3<Tr> criteria(
-          static_cast<FT>(options.min_facet_angle       < 0 ? 30  : Math::radiansToDegrees(options.min_facet_angle)),
-          static_cast<FT>(options.min_delaunay_radius   < 0 ? 0.1 : options.min_delaunay_radius),
-          static_cast<FT>(options.min_center_separation < 0 ? 0.1 : options.min_center_separation));
+      namespace params = CGAL::parameters;
+      Mesh_criteria criteria(
+          params::facet_angle(static_cast<FT>(options.min_facet_angle       < 0 ? 30  : Math::radiansToDegrees(options.min_facet_angle))),
+          params::facet_size(static_cast<FT>(options.min_delaunay_radius   < 0 ? 0.1 : options.min_delaunay_radius)),
+          params::facet_distance(static_cast<FT>(options.min_center_separation < 0 ? 0.1 : options.min_center_separation)),
+          params::cell_radius_edge_ratio(2.0));
 
       // Generate mesh
-      CGAL::make_surface_mesh(c2t3, surface, criteria, CGAL::Manifold_with_boundary_tag());
+      C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(domain, criteria, params::no_perturb(), params::no_exude());
 
-      THEA_LOG << "ImplicitSurfaceMesher: " << c2t3.number_of_facets() << " faces generated via Boissonnat-Oudot";
+      THEA_LOG << "ImplicitSurfaceMesher: " << c3t3.number_of_facets_in_complex() << " faces generated via Boissonnat-Oudot";
 
-      exportMesh(c2t3, result);
+      exportMesh(c3t3, result);
     }
 
 #endif // THEA_ENABLE_CGAL
@@ -294,55 +296,59 @@ class THEA_API ImplicitSurfaceMesher
 
 #if THEA_ENABLE_CGAL
 
-    /** Export C2t3 to another mesh type. */
-    template <typename MeshT> static void exportMesh(C2t3 & src, MeshT & dst)
+    /** Export C3t3 to another mesh type. */
+    template <typename C3t3T, typename MeshT> static void exportMesh(C3t3T & src, MeshT & dst)
     {
-      typedef Tr::Geom_traits::Point_3 Point_3;
+      typedef typename C3t3T::Triangulation Tr;
+      typedef typename Tr::Point Point_3;
 
       typedef Graphics::IncrementalMeshBuilder<MeshT> Builder;
       Builder builder(&dst);
 
-      typedef UnorderedMap<Tr::Vertex const *, typename Builder::VertexHandle> VertexMap;
+      typedef UnorderedMap<typename Tr::Vertex_handle, typename Builder::VertexHandle> VertexMap;
       VertexMap vmap;
 
       builder.begin();
-        for (C2t3::Vertex_iterator vi = src.vertices_begin(); vi != src.vertices_end(); ++vi)
+        // Add vertices from the triangulation
+        for (typename Tr::Finite_vertices_iterator vit = src.triangulation().finite_vertices_begin();
+             vit != src.triangulation().finite_vertices_end(); ++vit)
         {
-          Tr::Vertex const * vin = &(*vi);
-          Point_3 const & p = vin->point();
-
+          Point_3 const & p = vit->point();
           typename Builder::VertexHandle vout = builder.addVertex(Vector3((Real)p.x(), (Real)p.y(), (Real)p.z()));
-          if (!vout)
+          if (!builder.isValidVertexHandle(vout))
             throw Error("ImplicitSurfaceMesher: Could not add vertex from Boissonnat-Oudot polygonizer to mesh");
 
-          vmap[vin] = vout;
+          vmap[vit] = vout;
         }
 
+        // Add facets from the complex
         typename Builder::VertexHandle face_vertices[3];
-        int indices[3];
-        for (C2t3::Facet_iterator fi = src.facets_begin(); fi != src.facets_end(); ++fi)
+        for (typename C3t3T::Facets_in_complex_iterator fit = src.facets_in_complex_begin();
+             fit != src.facets_in_complex_end(); ++fit)
         {
-          switch (fi->second)
+          typename Tr::Cell_handle cell = fit->first;
+          int facet_index = fit->second;
+
+          // Get the three vertices of the facet (the vertex opposite to facet_index is excluded)
+          int vertex_indices[3];
+          int j = 0;
+          for (int i = 0; i < 4; ++i)
           {
-            case 0: indices[0] = 1; indices[1] = 2; indices[2] = 3; break;
-            case 1: indices[0] = 0; indices[1] = 3; indices[2] = 2; break;
-            case 2: indices[0] = 3; indices[1] = 0; indices[2] = 1; break;
-            case 3: indices[0] = 2; indices[1] = 1; indices[2] = 0; break;
-            default:
-              throw Error("ImplicitSurfaceMesher: Mesh created by Boissonnat-Oudot polygonizer has invalid face index in cell");
+            if (i != facet_index)
+              vertex_indices[j++] = i;
           }
 
           for (int i = 0; i < 3; ++i)
           {
-            Tr::Vertex const * vx = &(*fi->first->vertex(indices[i]));
-            typename VertexMap::const_iterator existing = vmap.find(vx);
+            typename Tr::Vertex_handle vh = cell->vertex(vertex_indices[i]);
+            typename VertexMap::const_iterator existing = vmap.find(vh);
             if (existing == vmap.end())
               throw Error("ImplicitSurfaceMesher: Mesh created by Boissonnat-Oudot polygonizer refers to unmapped vertex");
 
             face_vertices[i] = existing->second;
           }
 
-          if (!builder.addFace(face_vertices, face_vertices + 3))
+          if (!builder.isValidFaceHandle(builder.addFace(face_vertices, face_vertices + 3)))
             throw Error("ImplicitSurfaceMesher: Could not add triangle from Boissonnat-Oudot polygonizer to mesh");
         }
       builder.end();
