@@ -18,8 +18,8 @@
 #include "Platform.hpp"
 #include <cstdlib>
 
-// MinGW doesn't provide std::aligned_alloc even in C++17 mode
-#if defined(THEA_WINDOWS) && (defined(__MINGW32__) || defined(__MINGW64__))
+// No std::aligned_alloc in MinGW or MSVC even in C++17 mode
+#if defined(THEA_WINDOWS)
 #  include <malloc.h>
 #  define THEA_ALIGNED_ALLOC(alignment, size) _aligned_malloc(size, alignment)
 #  define THEA_ALIGNED_FREE(ptr) _aligned_free(ptr)

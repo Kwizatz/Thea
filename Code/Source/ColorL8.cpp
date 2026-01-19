@@ -34,7 +34,7 @@ ColorL8::ColorL8(ColorL const & c)
 : val(Math::clamp((uint8)std::round(c.value() * 255), (uint8)0, (uint8)255))
 {}
 
-ColorL::ColorL(ColorRgba const & other)
+ColorL8::ColorL8(ColorRgba const & other)
 {
   Real lum = 0.299f * other.r() + 0.587f * other.g() + 0.114f * other.b();
   val = Math::clamp((uint8)std::round(lum * 255), (uint8)0, (uint8)255);

@@ -18,6 +18,7 @@
 #include "Common.hpp"
 #include "Map.hpp"
 #include <any>
+#include <string>
 
 namespace Thea {
 

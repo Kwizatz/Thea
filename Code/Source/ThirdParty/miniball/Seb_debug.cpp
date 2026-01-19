@@ -10,6 +10,7 @@
 #endif
 
 #include "Seb_configure.h"
+#include "Seb_debug.h"
 
 namespace SEB_NAMESPACE {
 

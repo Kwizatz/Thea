@@ -106,7 +106,7 @@ IF(WITH_PLUGIN_GL AND wxWidgets_FOUND AND OPENGL_FOUND AND NOT WITH_OSMESA)
   ENDIF()
 
   # Build products
-  ADD_EXECUTABLE(Browse3D ${Browse3DSources})
+  ADD_EXECUTABLE(Browse3D WIN32 ${Browse3DSources})
 
   # Additional libraries to be linked
   TARGET_LINK_LIBRARIES(Browse3D ${Browse3DLibraries})

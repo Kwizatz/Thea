@@ -16,6 +16,14 @@ ENDIF(POLICY CMP0003)
 
 PROJECT(Thea CXX C)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Zc:preprocessor -bigobj")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Zc:preprocessor -bigobj")
+endif()
+
 # Avoid having to repeat condition after ELSE and ENDIF statements
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
 

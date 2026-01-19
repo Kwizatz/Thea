@@ -133,7 +133,7 @@ class /* THEA_API */ BallN : public RayIntersectableN<N, T>
     /** Get a bounding box for the ball. */
     AxisAlignedBoxN<N, T> getBounds() const
     {
-      VectorT half_ext(radius);
+      VectorT half_ext {VectorT::Constant(radius)};
       return AxisAlignedBoxN<N, T>(center - half_ext, center + half_ext);
     }
 

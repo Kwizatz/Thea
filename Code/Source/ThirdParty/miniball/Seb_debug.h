@@ -12,11 +12,11 @@
 #if !defined(_WIN32)
 #include <sys/resource.h>
 #include <sys/time.h>
-#elif defined(_MSVC_VER)
-typedef struct timeval {
+#elif defined(_MSC_VER)
+struct timeval {
   long tv_sec;
   long tv_usec;
-} timeval;
+};
 #endif
 
 namespace SEB_NAMESPACE {
@@ -84,7 +84,7 @@ namespace SEB_NAMESPACE {
     float lapse(const char *name);
     
   private: // private members:
-    typedef std::map<std::string,timeval> Timers;
+    typedef std::map<std::string, ::timeval> Timers;
     Timers timers;              // a collection of pairs (k,v) where
     // k is the timer name and v is the
     // (started) timer associated with k
