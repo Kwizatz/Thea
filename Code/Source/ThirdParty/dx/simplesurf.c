@@ -273,7 +273,6 @@ int _dxfJoinTriangleCorners(int nT, int *t, Htable *e_table, int *n_edges, EdgeS
 	*incident_tri  = SurfEdgeGetTriangles(the_edge),
 	*endpoints     = SurfEdgeGetVertices (the_edge),
 	nE             = 0, 
-	total_nE       = nT3,
 
 	/* initialize a pointer to the current triangle */
 
@@ -399,8 +398,6 @@ int _dxfJoinTriangleCorners(int nT, int *t, Htable *e_table, int *n_edges, EdgeS
 		      dx_bzero(edge_array+nE, sizeof(EdgeS)); nE++;
 
 		      dx_bzero(edge_array+nE, sizeof(EdgeS)); nE++;
-
-		      total_nE++; /*reinstate the edge that we thought was paired */
 		    }
 		  
 		  /* CASE THREE: we did not establish whether  the edge is a manifold edge :
@@ -473,8 +470,6 @@ int _dxfJoinTriangleCorners(int nT, int *t, Htable *e_table, int *n_edges, EdgeS
 			     we set the edge label to 2 (manifold edge) in the table */
 
 			  SurfEdgeLabel(edge_in_table) = 2;
-
-			  total_nE--; /* substract the edge that is paired */
 			}
 		      else
 			{
@@ -7938,7 +7933,6 @@ int _dxfSimplifyManifoldSurface(SimpData *simp_data)
 {
   int 
     e,
-    num_edg_tested                 = 0,                   /* number of edges extracted from the heap */
     num_edg_added_to_heap          = 0;
 
   /* allocate buffers for storing various information on the vertex and edge stars */
@@ -8025,7 +8019,6 @@ int _dxfSimplifyManifoldSurface(SimpData *simp_data)
 	      val0        = simp_data->valence[v0],
 	      val1        = simp_data->valence[v1];
 
-	    num_edg_tested ++;
 	    /* mark the edge as removed from the heap: give an index such that HeapDelete would fail + 1*/
 		      
 	    simp_data->edge2index[e] = simp_data->heap_outside_index;

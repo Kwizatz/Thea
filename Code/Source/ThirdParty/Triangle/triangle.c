@@ -14529,12 +14529,12 @@ char **argv;
   int vertexindex;
   int attribindex;
 #else /* not TRILIBRARY */
+  long elementnumber;
   FILE *outfile;
 #endif /* not TRILIBRARY */
   struct otri triangleloop;
   vertex p1, p2, p3;
   vertex mid1, mid2, mid3;
-  long elementnumber;
   int i;
 
 #ifdef TRILIBRARY
@@ -14574,7 +14574,9 @@ char **argv;
   traversalinit(&m->triangles);
   triangleloop.tri = triangletraverse(m);
   triangleloop.orient = 0;
+#ifndef TRILIBRARY
   elementnumber = b->firstnumber;
+#endif
   while (triangleloop.tri != (triangle *) NULL) {
     org(triangleloop, p1);
     dest(triangleloop, p2);
@@ -14617,10 +14619,10 @@ char **argv;
       fprintf(outfile, "  %.17g", elemattribute(triangleloop, i));
     }
     fprintf(outfile, "\n");
+    elementnumber++;
 #endif /* not TRILIBRARY */
 
     triangleloop.tri = triangletraverse(m);
-    elementnumber++;
   }
 
 #ifndef TRILIBRARY
@@ -14979,13 +14981,14 @@ char **argv;
   int coordindex;
   int attribindex;
 #else /* not TRILIBRARY */
+  long vedgenumber;
   FILE *outfile;
 #endif /* not TRILIBRARY */
   struct otri triangleloop, trisym;
   vertex torg, tdest, tapex;
   REAL circumcenter[2];
   REAL xi, eta;
-  long vnodenumber, vedgenumber;
+  long vnodenumber;
   int p1, p2;
   int i;
   triangle ptr;                         /* Temporary variable used by sym(). */
@@ -15089,11 +15092,11 @@ char **argv;
   }
   /* Number of edges, zero boundary markers. */
   fprintf(outfile, "%ld  %d\n", m->edges, 0);
+  vedgenumber = b->firstnumber;
 #endif /* not TRILIBRARY */
 
   traversalinit(&m->triangles);
   triangleloop.tri = triangletraverse(m);
-  vedgenumber = b->firstnumber;
   /* To loop over the set of edges, loop over all triangles, and look at   */
   /*   the three edges of each triangle.  If there isn't another triangle  */
   /*   adjacent to the edge, operate on the edge.  If there is another     */
@@ -15136,7 +15139,9 @@ char **argv;
           fprintf(outfile, "%4ld   %d  %d\n", vedgenumber, p1, p2);
 #endif /* not TRILIBRARY */
         }
+#ifndef TRILIBRARY
         vedgenumber++;
+#endif
       }
     }
     triangleloop.tri = triangletraverse(m);

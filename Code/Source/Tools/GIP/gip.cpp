@@ -301,7 +301,7 @@ flattenToFloatArray(Image const & image, float32 * buffer)
   return true;
 }
 
-template <typename T, uint32 MAX_VALUE> T convertValue(float32 val) { return static_cast<T>(MAX_VALUE * val + 0.5); }
+template <typename T, uint32 MAX_VALUE> T convertValue(float32 val) { return static_cast<T>(static_cast<float32>(MAX_VALUE) * val + 0.5f); }
 template <> float32 convertValue<float32, 1>(float32 val) { return val; }
 template <> float64 convertValue<float64, 1>(float32 val) { return val; }
 
@@ -496,8 +496,8 @@ initCL()
   CL::context = clCreateContext(nullptr, 1, &CL::device_id, nullptr, nullptr, &ret);
   checkCL(ret, "initCL::createContext");
 
-  // Create a command queue
-  CL::command_queue = clCreateCommandQueue(CL::context, CL::device_id, 0, &ret);
+  // Create a command queue (using newer API to avoid deprecation warning)
+  CL::command_queue = clCreateCommandQueueWithProperties(CL::context, CL::device_id, nullptr, &ret);
   checkCL(ret, "initCL::createCommandQueue");
 
   return true;

@@ -64,11 +64,11 @@ class NeighboringSample
 } // namespace Algorithms
 } // namespace Thea
 
+#if !(defined(__clang__) && defined(__MINGW32__)) 
 namespace std {
-
 template <> struct is_trivially_copyable<Thea::Algorithms::SamplePoint3Internal::NeighboringSample> : public std::true_type {};
-
 } // namespace std
+#endif
 
 namespace Thea {
 namespace Algorithms {
