@@ -18,29 +18,6 @@
 #define ARCOMP_H
 
 #include <complex>
-
-#ifdef __GNUG__
-  
-#define arcomplex std::complex
-
-#endif
-
-#if defined(__SUNPRO_CC) || defined(__sgi)
-
-  template <class ARFLOAT>
-  class arcomplex: public complex
-  {
-   public:
-
-    arcomplex(ARFLOAT x, ARFLOAT y): complex(x,y) { }
-    arcomplex(): complex() { }
-    arcomplex(complex x): complex(x) { }
-
-  };
-
-#endif
-
+template <typename T>  
+using arcomplex = std::complex<T>;
 #endif // ARCOMP_H
-
-
-

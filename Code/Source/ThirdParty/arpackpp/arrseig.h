@@ -43,10 +43,10 @@ class ARrcStdEig {
 
  // a.1) User defined parameters.
 
-  int     n;          // Dimension of the eigenproblem.
-  int     nev;        // Number of eigenvalues to be computed. 0 < nev < n-1.
-  int     ncv;        // Number of Arnoldi vectors generated at each iteration.
-  int     maxit;      // Maximum number of Arnoldi update iterations allowed.
+  int     n{};          // Dimension of the eigenproblem.
+  int     nev{};        // Number of eigenvalues to be computed. 0 < nev < n-1.
+  int     ncv{};        // Number of Arnoldi vectors generated at each iteration.
+  int     maxit{};      // Maximum number of Arnoldi update iterations allowed.
   char*   which;      // Specify which of the Ritz values of OP to compute.
   ARFLOAT tol;        // Stopping criterion (relative accuracy of Ritz values).
   ARFLOAT sigmaI;     // Imaginary part of shift (for nonsymmetric problems).
@@ -66,7 +66,7 @@ class ARrcStdEig {
   bool    ValuesOK;   // Indicates if eigenvalues were calculated.
   bool    VectorsOK;  // Indicates if eigenvectors were determined.
   bool    SchurOK;    // Indicates if Schur vectors were determined.
-  bool    AutoShift;  // Indicates if implicit shifts will be generated
+  bool    AutoShift{};// Indicates if implicit shifts will be generated
                       // internally (or will be supplied by the user).
   char    bmat;       // Indicates if the problem is a standard ('I') or
                       // generalized ('G") eigenproblem.
