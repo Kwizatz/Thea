@@ -52,9 +52,9 @@ testGL(int argc, char * argv[])
 
   // Try to load the OpenGL plugin from the same parent directory as the executable
 #ifdef THEA_DEBUG_BUILD
-  string plugin_path = FilePath::concat(bin_path, "../lib/libTheaPluginGLd");
+  string plugin_path = FilePath::concat(bin_path, "../lib/" LIBPREFIX "TheaPluginGLd");
 #else
-  string plugin_path = FilePath::concat(bin_path, "../lib/libTheaPluginGL");
+  string plugin_path = FilePath::concat(bin_path, "../lib/" LIBPREFIX "TheaPluginGL");
 #endif
 
   cout << "Loading plugin: " << plugin_path << endl;

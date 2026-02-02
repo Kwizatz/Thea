@@ -49,6 +49,9 @@ IF(OPENGL_FOUND)
   ENDIF()
 ENDIF()
 
+# Pass the library prefix to the compiler
+add_definitions(-DLIBPREFIX="${CMAKE_SHARED_LIBRARY_PREFIX}")
+
 # Shared library flags
 IF(THEA_DLL)
   ADD_DEFINITIONS(-DTHEA_DLL -DTHEA_DLL_IMPORTS)
@@ -188,7 +191,10 @@ ADD_EXECUTABLE(TheaTestCSPARSE ${TheaTestCSPARSESources})
 
 # Additional libraries to be linked
 TARGET_LINK_LIBRARIES(TheaTestCSPARSE ${TheaTestCSPARSELibraries})
-SET_TARGET_PROPERTIES(TheaTestCSPARSE PROPERTIES LINK_FLAGS "${Thea_DEPS_LDFLAGS}")
+SET_TARGET_PROPERTIES(TheaTestCSPARSE
+    PROPERTIES 
+        LINK_FLAGS "${Thea_DEPS_LDFLAGS}"
+)
 
 # Fix library install names on OS X
 IF(APPLE)

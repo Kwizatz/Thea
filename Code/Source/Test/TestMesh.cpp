@@ -45,14 +45,8 @@ main(int argc, char * argv[])
 {
   try
   {
-#ifdef _MSC_VER
-    data_dir = FilePath::concat(FilePath::parent(FileSystem::resolve(Application::programPath())),
-                                "../../../../../Data/Models");
-#else
     data_dir = FilePath::concat(FilePath::parent(FileSystem::resolve(Application::programPath())),
                                 "../../../../Data/Models");
-#endif
-    testMesh(argc, argv);
   }
   THEA_CATCH(return -1;, ERROR, "%s", "An error occurred")
 

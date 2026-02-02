@@ -34,7 +34,20 @@ ADD_LIBRARY(TheaPluginCSPARSE SHARED ${TheaPluginCSPARSESources})
 
 # Additional libraries to be linked
 TARGET_LINK_LIBRARIES(TheaPluginCSPARSE ${TheaPluginCSPARSELibraries})
-SET_TARGET_PROPERTIES(TheaPluginCSPARSE PROPERTIES LINK_FLAGS "${Thea_DEPS_LDFLAGS}")
+SET_TARGET_PROPERTIES(TheaPluginCSPARSE
+    PROPERTIES
+        LINK_FLAGS "${Thea_DEPS_LDFLAGS}")
+
+# Fix plugin output paths on MSVC
+if(MSVC)
+    SET_TARGET_PROPERTIES(TheaPluginCSPARSE
+        PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY "${OutputRoot}/lib"
+            RUNTIME_OUTPUT_DIRECTORY_DEBUG "${OutputRoot}/lib"
+            RUNTIME_OUTPUT_DIRECTORY_RELEASE "${OutputRoot}/lib"
+            RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${OutputRoot}/lib"
+            RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL "${OutputRoot}/lib")
+endif()
 
 # Fix library install names on OS X
 IF(APPLE)
@@ -47,6 +60,5 @@ SET_TARGET_PROPERTIES(TheaPluginCSPARSE
                         PROPERTIES
                           INSTALL_RPATH_USE_LINK_PATH TRUE
                           INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-
 INSTALL(TARGETS TheaPluginCSPARSE DESTINATION lib)
 INSTALL(TARGETS TheaPluginCSPARSE DESTINATION share/Thea/Build/Output/lib)  # for tools to use

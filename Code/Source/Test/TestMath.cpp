@@ -54,7 +54,7 @@ testSVD()
   a(4, 0) = 2;
 
   // Make sure things work with more columns than rows
-  a = a.transpose();
+  a = a.transpose().eval();
   Eigen::JacobiSVD<MatrixXf> svd(a, Eigen::ComputeFullU | Eigen::ComputeFullV);
   MatrixXf u = svd.matrixU();
   MatrixXf v = svd.matrixV();
@@ -84,10 +84,20 @@ testSVD()
 
   // Print U * D * V
   cout << "\nU * D * V^T =" << endl;
-  printMatrix(u * MatrixXf(d.asDiagonal()) * v.transpose());
+  MatrixXf d_full = MatrixXf::Zero(u.cols(), v.cols());
+  d_full.diagonal() = d;
+  printMatrix(u * d_full * v.transpose());
 
   // Compute the pseudo-inverse of A via SVD
-  MatrixXf svd_inv = v.transpose() * d.asDiagonal().inverse() * u;
+  MatrixXf d_inv_full = MatrixXf::Zero(v.cols(), u.cols());
+  for (int i = 0; i < d.size(); ++i)
+  {
+      if (d(i) > 1e-10)  // avoid division by zero for near-zero singular values
+      {
+          d_inv_full(i, i) = 1.0f / d(i);
+      }
+  }
+  MatrixXf svd_inv = v * d_inv_full * u.transpose();
   cout << "\nSVD pseudo-inverse =" << endl;
   printMatrix(svd_inv);
 
@@ -151,7 +161,7 @@ testSVD()
 bool
 testLogisticRegression()
 {
-  LogisticRegression logreg(1);
+  LogisticRegression logreg(2);
   double x, y;
 
   x = 1900; y = 0.075995; logreg.addObservation(&x, y);
@@ -168,8 +178,9 @@ testLogisticRegression()
 
   if (logreg.solve())
   {
-    double a = logreg.getSolution()[0];
-    double b = logreg.getSolution()[1];
+    cout << "rows " << logreg.getSolution().rows() << " cols " << logreg.getSolution().cols() << endl;
+    double a = logreg.getSolution()(0);
+    double b = logreg.getSolution()(1);
 
     double r = b;
     double t_0 = 1900;

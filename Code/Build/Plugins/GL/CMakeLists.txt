@@ -92,6 +92,17 @@ ADD_LIBRARY(TheaPluginGL SHARED ${TheaPluginGLSources})
 TARGET_LINK_LIBRARIES(TheaPluginGL ${TheaPluginGLLibraries})
 SET_TARGET_PROPERTIES(TheaPluginGL PROPERTIES LINK_FLAGS "${Thea_DEPS_LDFLAGS} ${OPENGL_LDFLAGS}")
 
+# Fix plugin output paths on MSVC
+if(MSVC)
+    SET_TARGET_PROPERTIES(TheaPluginGL
+        PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY "${OutputRoot}/lib"
+            RUNTIME_OUTPUT_DIRECTORY_DEBUG "${OutputRoot}/lib"
+            RUNTIME_OUTPUT_DIRECTORY_RELEASE "${OutputRoot}/lib"
+            RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${OutputRoot}/lib"
+            RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL "${OutputRoot}/lib")
+endif()
+
 # Fix library install names on OS X
 IF(APPLE)
   INCLUDE(${CMAKE_MODULE_PATH}/OSXFixDylibReferences.cmake)

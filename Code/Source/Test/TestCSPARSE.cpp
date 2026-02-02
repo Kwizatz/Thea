@@ -46,9 +46,9 @@ testCSPARSE(int argc, char * argv[])
 
   // Try to load the CSPARSE plugin from the same parent directory as the executable
 #ifdef THEA_DEBUG_BUILD
-  string plugin_path = FilePath::concat(bin_path, "../lib/libTheaPluginCSPARSEd");
+  string plugin_path = FilePath::concat(bin_path, "../lib/" LIBPREFIX "TheaPluginCSPARSEd");
 #else
-  string plugin_path = FilePath::concat(bin_path, "../lib/libTheaPluginCSPARSE");
+  string plugin_path = FilePath::concat(bin_path, "../lib/" LIBPREFIX "TheaPluginCSPARSE");
 #endif
 
   cout << "Loading plugin: " << plugin_path << endl;
