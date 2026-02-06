@@ -10,3 +10,4 @@ msvc64
 .vscode
 Output
 BuildFlags.txt
+PKGBUILD

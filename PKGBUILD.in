@@ -14,8 +14,7 @@ fi
 
 pkgbase=${_pkgprefix}thea
 pkgname=("${_pkgprefix}thea" "${_pkgprefix}thea-debug")
-# Version is computed dynamically by pkgver() from git
-pkgver=0.0.r821.gc667330
+pkgver=@PACKAGE_VERSION@
 pkgrel=1
 pkgdesc="A toolkit for visual computing with a focus on geometry processing"
 arch=('x86_64')
@@ -85,18 +84,6 @@ _with_tests=OFF
 
 # Get the directory where the PKGBUILD is located (the repo root)
 _srcroot="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Compute version from git: 0.0.rCOMMIT_COUNT.gSHORT_HASH (date-based fallback)
-pkgver() {
-    cd "$_srcroot"
-    if git rev-parse --git-dir > /dev/null 2>&1; then
-        # Format: 0.0.r<commit_count>.g<short_hash>
-        printf "0.0.r%s.g%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-    else
-        # Fallback if not a git repo
-        echo "0.0.0"
-    fi
-}
 
 prepare() {
     # Create build directories in the source directory

@@ -30,6 +30,8 @@ IF(NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE "RelWithDebInfo")
 ENDIF()
 
+find_package(Git)
+
 # We'll fix this later, right now we get an error on MSYS2/MinGW64,
 # Either way bin/Thea is not a more of a standard location for executables than share/Thea/Build/Output/bin.
 # https://stackoverflow.com/a/42697475
@@ -105,13 +107,40 @@ IF(WITH_TOOLS)
   ADD_SUBDIRECTORY(Tools)
 ENDIF()
 
+if(GIT_FOUND)
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT_VARIABLE GIT_COMMIT_HASH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    message(STATUS "Git commit hash: ${GIT_COMMIT_HASH}")
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT_VARIABLE GIT_COMMIT_COUNT
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    message(STATUS "Git commit count: ${GIT_COMMIT_COUNT}")
+else()
+    set(GIT_COMMIT_HASH "unknown")
+    set(GIT_COMMIT_COUNT "unknown")
+    message(WARNING "Git not found. Version information will be unavailable.")
+endif()
+
 # Generate the version file
-set(PACKAGE_VERSION "1.0.0") # Define your project's version
+set(PACKAGE_VERSION "0.0.r${GIT_COMMIT_COUNT}.g${GIT_COMMIT_HASH}") # Define your project's version
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
     "${CMAKE_CURRENT_BINARY_DIR}/TheaConfigVersion.cmake"
     VERSION ${PACKAGE_VERSION}
     COMPATIBILITY AnyNewerVersion
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../PKGBUILD.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../PKGBUILD"
+    @ONLY
 )
 
 configure_file(
