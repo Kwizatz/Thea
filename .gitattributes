@@ -45,3 +45,4 @@
 *.tar.gz binary
 *.tif binary
 *.zip binary
+*.pkg.tar.zst binary

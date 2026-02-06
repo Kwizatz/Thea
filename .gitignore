@@ -1,0 +1,11 @@
+*.pkg.tar.zst
+pkg
+build-debug
+build-release
+gcc64
+mingw64
+clang64
+ucrt64
+.vscode
+Output
+BuildFlags.txt
