@@ -30,11 +30,13 @@ IF(NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE "RelWithDebInfo")
 ENDIF()
 
+# We'll fix this later, right now we get an error on MSYS2/MinGW64,
+# Either way bin/Thea is not a more of a standard location for executables than share/Thea/Build/Output/bin.
 # https://stackoverflow.com/a/42697475
-MACRO(install_symlink filepath sympath)
-  INSTALL(CODE "EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink ${filepath} ${sympath})")
-  INSTALL(CODE "MESSAGE(STATUS \"Created symlink: ${sympath} -> ${filepath}\")")
-ENDMACRO(install_symlink)
+# MACRO(install_symlink filepath sympath)
+#   INSTALL(CODE "EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink ${filepath} ${sympath})")
+#   INSTALL(CODE "MESSAGE(STATUS \"Created symlink: ${sympath} -> ${filepath}\")")
+# ENDMACRO(install_symlink)
 
 # Are we building the library in a stripped-down more? (no
 IF(LITE)
@@ -102,3 +104,31 @@ ENDIF()
 IF(WITH_TOOLS)
   ADD_SUBDIRECTORY(Tools)
 ENDIF()
+
+# Generate the version file
+set(PACKAGE_VERSION "1.0.0") # Define your project's version
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/TheaConfigVersion.cmake"
+    VERSION ${PACKAGE_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/TheaConfig.cmake.in" # Source template
+    "${CMAKE_CURRENT_BINARY_DIR}/TheaConfig.cmake"         # Output file
+    @ONLY
+)
+
+# Install the generated config and version files
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/TheaConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/TheaConfigVersion.cmake"
+    DESTINATION lib/cmake/Thea
+)
+
+install(EXPORT TheaExportSet
+    FILE TheaTargets.cmake
+    NAMESPACE Thea::
+    DESTINATION lib/cmake/Thea
+)

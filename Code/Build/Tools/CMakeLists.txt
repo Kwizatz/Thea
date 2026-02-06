@@ -579,7 +579,7 @@ FOREACH(tgt ${TheaAllTools})
   INSTALL(TARGETS ${tgt} DESTINATION share/Thea/Build/Output/bin)
 ENDFOREACH()
 
-install_symlink(${CMAKE_INSTALL_PREFIX}/share/Thea/Build/Output/bin
-                ${CMAKE_INSTALL_PREFIX}/bin/Thea)
+# install_symlink(${CMAKE_INSTALL_PREFIX}/share/Thea/Build/Output/bin
+#                 ${CMAKE_INSTALL_PREFIX}/bin/Thea)
 
 INSTALL(DIRECTORY ${Thea_PROJECT_ROOT}/Resources DESTINATION share/Thea)

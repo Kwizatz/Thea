@@ -1,0 +1,19 @@
+{
+  "dependencies": [
+    "eigen3",
+    "freeimage",
+    "gmp",
+    "cgal",
+    "opencl",
+    "freeglut",
+    "wxwidgets",
+    "arpack-ng",
+    "superlu",
+    "blas",
+    "openblas",
+    "lapack",
+    "mesa",
+    "metis",
+    "pkgconf"
+  ]
+}

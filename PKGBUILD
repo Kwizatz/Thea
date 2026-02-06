@@ -15,7 +15,7 @@ fi
 pkgbase=${_pkgprefix}thea
 pkgname=("${_pkgprefix}thea" "${_pkgprefix}thea-debug")
 # Version is computed dynamically by pkgver() from git
-pkgver=0.0.r819.gc8bfc9d
+pkgver=0.0.r820.g81e1b5b
 pkgrel=1
 pkgdesc="A toolkit for visual computing with a focus on geometry processing"
 arch=('x86_64')

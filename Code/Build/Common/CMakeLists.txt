@@ -97,7 +97,11 @@ ELSEIF(${CMAKE_MAJOR_VERSION} EQUAL 2)
   ENDIF()
 ENDIF()
 
-INSTALL(TARGETS Thea DESTINATION lib)
+INSTALL(TARGETS Thea
+        EXPORT TheaExportSet
+        ARCHIVE DESTINATION lib
+        LIBRARY DESTINATION lib
+        RUNTIME DESTINATION bin)
 
 IF(UseFilesMatching)  # CMake 2.6 and above
   INSTALL(DIRECTORY ${SourceRoot}/ DESTINATION include/Thea

@@ -6,6 +6,7 @@ gcc64
 mingw64
 clang64
 ucrt64
+msvc64
 .vscode
 Output
 BuildFlags.txt
