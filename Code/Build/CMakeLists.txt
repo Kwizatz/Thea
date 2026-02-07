@@ -141,6 +141,7 @@ configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/../../PKGBUILD.in"
     "${CMAKE_CURRENT_SOURCE_DIR}/../../PKGBUILD"
     @ONLY
+    NEWLINE_STYLE LF
 )
 
 configure_file(

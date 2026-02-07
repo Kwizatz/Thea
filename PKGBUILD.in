@@ -104,6 +104,8 @@ _build_common() {
         local _generator="MinGW Makefiles"
         local _make_cmd="mingw32-make"
         local _gl_plugin=OFF  # OpenGL plugin may not work well on MSYS2
+        # Prevent MSYS2 from converting the install prefix path to Windows format
+        export MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX="
     else
         local _install_prefix="/usr"
         local _eigen_include="/usr/include/eigen3"

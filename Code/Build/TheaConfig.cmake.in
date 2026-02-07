@@ -8,6 +8,12 @@
 #
 # Imported targets:
 #   Thea::Thea        - The main Thea library target
+#
+# Note: Depending on build options, you may need to find and link the following
+# dependencies in your project:
+#   - CGAL (if Thea was built with CGAL support)
+#   - GMP/MPFR (if Thea was built with CGAL support)
+#   - FreeImage (if Thea was built with FreeImage support)
 
 @PACKAGE_INIT@
 

@@ -61,7 +61,9 @@ SET(TheaLibraries ${Thea_DEPS_LIBRARIES})
 ADD_LIBRARY(Thea STATIC ${TheaSources})
 
 # Additional libraries to be linked
-TARGET_LINK_LIBRARIES(Thea ${TheaLibraries})
+# Use PRIVATE to avoid embedding absolute paths to dependencies in the exported cmake config.
+# Downstream projects should link to these dependencies themselves via find_package.
+TARGET_LINK_LIBRARIES(Thea PRIVATE ${TheaLibraries})
 SET_TARGET_PROPERTIES(Thea PROPERTIES LINK_FLAGS "${Thea_DEPS_LDFLAGS}")
 
 # Fix library install names on OS X
