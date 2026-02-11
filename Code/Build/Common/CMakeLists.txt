@@ -64,6 +64,13 @@ ADD_LIBRARY(Thea STATIC ${TheaSources})
 # Use PRIVATE to avoid embedding absolute paths to dependencies in the exported cmake config.
 # Downstream projects should link to these dependencies themselves via find_package.
 TARGET_LINK_LIBRARIES(Thea PRIVATE ${TheaLibraries})
+
+# Eigen3 is a header-only library and a public dependency - downstream projects need its include dirs
+# Use INTERFACE so it's not used for building Thea (already in DEPS_LIBRARIES) but exported to consumers
+if(TARGET Eigen3::Eigen)
+    TARGET_LINK_LIBRARIES(Thea INTERFACE Eigen3::Eigen)
+endif()
+
 SET_TARGET_PROPERTIES(Thea PROPERTIES LINK_FLAGS "${Thea_DEPS_LDFLAGS}")
 
 # Fix library install names on OS X

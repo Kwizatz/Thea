@@ -19,12 +19,15 @@
 
 include(CMakeFindDependencyMacro)
 
+# Find Eigen3 dependency
+find_dependency(Eigen3 REQUIRED)
+
 # Include the targets file
 include("${CMAKE_CURRENT_LIST_DIR}/TheaTargets.cmake")
 
 # For backwards compatibility
 set(Thea_FOUND TRUE)
-set(Thea_INCLUDE_DIRS "@CMAKE_INSTALL_PREFIX@/include")
+set(Thea_INCLUDE_DIRS "@CMAKE_INSTALL_PREFIX@/include" ${EIGEN3_INCLUDE_DIR})
 set(Thea_LIBRARIES Thea::Thea)
 
 check_required_components(Thea)
