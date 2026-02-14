@@ -33,6 +33,7 @@ if [[ "$_msys2" == true ]]; then
         "${MINGW_PACKAGE_PREFIX}-gmp"
         "${MINGW_PACKAGE_PREFIX}-mpfr"
         "${MINGW_PACKAGE_PREFIX}-wxwidgets3.2-msw"
+        "${MINGW_PACKAGE_PREFIX}-freeimage"
         "${MINGW_PACKAGE_PREFIX}-opencl-headers"
         "${MINGW_PACKAGE_PREFIX}-opencl-icd"
         'git'
@@ -41,9 +42,10 @@ if [[ "$_msys2" == true ]]; then
         "${MINGW_PACKAGE_PREFIX}-eigen3"
         "${MINGW_PACKAGE_PREFIX}-gcc-libs"
         "${MINGW_PACKAGE_PREFIX}-gmp"
+        "${MINGW_PACKAGE_PREFIX}-cgal"
+        "${MINGW_PACKAGE_PREFIX}-freeimage"
     )
     optdepends=(
-        "${MINGW_PACKAGE_PREFIX}-cgal: Additional computational geometry algorithms"
         "${MINGW_PACKAGE_PREFIX}-wxwidgets3.2-msw: GUI tools support"
     )
 else
@@ -61,6 +63,7 @@ else
         'glu'
         'libgl'
         'wxwidgets-gtk3'
+        'freeimage'
         'opencl-headers'
         'ocl-icd'
         'git'
@@ -68,9 +71,10 @@ else
     depends=(
         'eigen'
         'gmp'
+        'cgal'
+        'freeimage'
     )
     optdepends=(
-        'cgal: Additional computational geometry algorithms'
         'mesa: OpenGL plugin support'
         'wxwidgets-gtk3: GUI tools support'
     )
@@ -88,7 +92,9 @@ _with_tests=OFF
 _srcroot="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 prepare() {
-    # Create build directories in the source directory
+    # Clean and recreate build directories to avoid stale CMake cache
+    rm -rf "$_srcroot/build-release"
+    rm -rf "$_srcroot/build-debug"
     mkdir -p "$_srcroot/build-release"
     mkdir -p "$_srcroot/build-debug"
 }
@@ -116,9 +122,25 @@ _build_common() {
         local _gl_plugin=ON
     fi
     
+    # Strip LTO flags injected by makepkg.conf so we produce a traditional static archive
+    # with real ELF symbols instead of __gnu_lto_slim stubs
+    local _cflags="${CFLAGS}"
+    local _cxxflags="${CXXFLAGS}"
+    local _ldflags="${LDFLAGS}"
+    _cflags="${_cflags//-flto=auto/}"
+    _cflags="${_cflags//-flto/}"
+    _cflags="${_cflags//-fno-fat-lto-objects/}"
+    _cxxflags="${_cxxflags//-flto=auto/}"
+    _cxxflags="${_cxxflags//-flto/}"
+    _cxxflags="${_cxxflags//-fno-fat-lto-objects/}"
+    _ldflags="${_ldflags//-flto=auto/}"
+    _ldflags="${_ldflags//-flto/}"
+    
+    CFLAGS="$_cflags" CXXFLAGS="$_cxxflags" LDFLAGS="$_ldflags" \
     cmake "$_srcroot/Code/Build" \
         -G "$_generator" \
         -DCMAKE_BUILD_TYPE=$build_type \
+        -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
         -DCMAKE_INSTALL_PREFIX="$_install_prefix" \
         -DTHEA_DEPS_ROOT="$_install_prefix" \
         -DEIGEN3_INCLUDE_DIR="$_eigen_include" \
@@ -128,7 +150,7 @@ _build_common() {
         -DWITH_TOOLS=${_with_tools} \
         -DWITH_TESTS=${_with_tests} \
         -DWITH_CGAL=ON \
-        -DWITH_FREEIMAGE=OFF \
+        -DWITH_FREEIMAGE=ON \
         -DWITH_LIB3DS=OFF \
         -DWITH_CLUTO=OFF \
         -DLITE=OFF
@@ -213,8 +235,11 @@ eval "package_${_pkgprefix}thea-debug() {
     rm -rf \"\$pkgdir\${_prefix}/bin\"
     rm -rf \"\$pkgdir\${_prefix}/share/Thea\"
     
-    # Keep the CMake config for debug but it will reference the release package's headers
-    # The TheaTargets.cmake will have proper debug configuration
+    # Remove duplicate CMake config files (already installed by release package)
+    # Only keep the debug-specific targets file (TheaTargets-debug.cmake)
+    rm -f \"\$pkgdir\${_prefix}/lib/cmake/Thea/TheaConfig.cmake\"
+    rm -f \"\$pkgdir\${_prefix}/lib/cmake/Thea/TheaConfigVersion.cmake\"
+    rm -f \"\$pkgdir\${_prefix}/lib/cmake/Thea/TheaTargets.cmake\"
     
     # Install license
     install -Dm644 \"\$_srcroot/LICENSE.txt\" \"\$pkgdir\${_prefix}/share/licenses/\${pkgname}/LICENSE\"
