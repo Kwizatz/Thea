@@ -60,6 +60,14 @@ SET(TheaLibraries ${Thea_DEPS_LIBRARIES})
 # Build products
 ADD_LIBRARY(Thea STATIC ${TheaSources})
 
+# Set up include directories:
+# - BUILD_INTERFACE: source tree headers used when building Thea and dependents in the same build tree
+# - INSTALL_INTERFACE: installed headers used by consumers via find_package
+TARGET_INCLUDE_DIRECTORIES(Thea PUBLIC
+  $<BUILD_INTERFACE:${SourceRoot}/..>
+  $<INSTALL_INTERFACE:include>
+)
+
 # Additional libraries to be linked
 # Use PRIVATE to avoid embedding absolute paths to dependencies in the exported cmake config.
 # Downstream projects should link to these dependencies themselves via find_package.
@@ -68,7 +76,7 @@ TARGET_LINK_LIBRARIES(Thea PRIVATE ${TheaLibraries})
 # Eigen3 is a header-only library and a public dependency - downstream projects need its include dirs
 # Use INTERFACE so it's not used for building Thea (already in DEPS_LIBRARIES) but exported to consumers
 if(TARGET Eigen3::Eigen)
-    TARGET_LINK_LIBRARIES(Thea INTERFACE Eigen3::Eigen)
+    TARGET_LINK_LIBRARIES(Thea PUBLIC Eigen3::Eigen)
 endif()
 
 SET_TARGET_PROPERTIES(Thea PROPERTIES LINK_FLAGS "${Thea_DEPS_LDFLAGS}")

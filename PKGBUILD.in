@@ -40,6 +40,7 @@ if [[ "$_msys2" == true ]]; then
     depends=(
         "${MINGW_PACKAGE_PREFIX}-eigen3"
         "${MINGW_PACKAGE_PREFIX}-gcc-libs"
+        "${MINGW_PACKAGE_PREFIX}-gmp"
     )
     optdepends=(
         "${MINGW_PACKAGE_PREFIX}-cgal: Additional computational geometry algorithms"
@@ -66,6 +67,7 @@ else
     )
     depends=(
         'eigen'
+        'gmp'
     )
     optdepends=(
         'cgal: Additional computational geometry algorithms'

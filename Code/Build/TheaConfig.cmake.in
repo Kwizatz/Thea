@@ -19,15 +19,44 @@
 
 include(CMakeFindDependencyMacro)
 
-# Find Eigen3 dependency
+# Compute the installation prefix relative to this file.
+# This file is installed at <prefix>/lib/cmake/Thea/TheaConfig.cmake
+get_filename_component(_THEA_PREFIX "${CMAKE_CURRENT_LIST_DIR}/../../.." ABSOLUTE)
+
+# Find required dependencies
 find_dependency(Eigen3 REQUIRED)
+
+# Recreate imported targets for optional dependencies that were linked at build time.
+# The exported TheaTargets.cmake references these target names in INTERFACE_LINK_LIBRARIES.
+
+# GMP (used by CGAL)
+if(NOT TARGET Thea::GMP)
+  find_library(_thea_gmp_lib NAMES gmp libgmp)
+  if(_thea_gmp_lib)
+    add_library(Thea::GMP UNKNOWN IMPORTED)
+    set_target_properties(Thea::GMP PROPERTIES IMPORTED_LOCATION "${_thea_gmp_lib}")
+  endif()
+  unset(_thea_gmp_lib CACHE)
+endif()
+
+# FreeImage
+if(NOT TARGET Thea::FreeImage)
+  find_library(_thea_freeimage_lib NAMES freeimageplus freeimage)
+  if(_thea_freeimage_lib)
+    add_library(Thea::FreeImage UNKNOWN IMPORTED)
+    set_target_properties(Thea::FreeImage PROPERTIES IMPORTED_LOCATION "${_thea_freeimage_lib}")
+  endif()
+  unset(_thea_freeimage_lib CACHE)
+endif()
 
 # Include the targets file
 include("${CMAKE_CURRENT_LIST_DIR}/TheaTargets.cmake")
 
 # For backwards compatibility
 set(Thea_FOUND TRUE)
-set(Thea_INCLUDE_DIRS "@CMAKE_INSTALL_PREFIX@/include" ${EIGEN3_INCLUDE_DIR})
+set(Thea_INCLUDE_DIRS "${_THEA_PREFIX}/include")
 set(Thea_LIBRARIES Thea::Thea)
+
+unset(_THEA_PREFIX)
 
 check_required_components(Thea)

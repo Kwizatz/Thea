@@ -103,12 +103,24 @@ IF(WITH_CGAL AND Thea_FIND_CGAL)
     ENDIF()
 
     IF(CGAL_USE_GMP)
-      if(GMP_LIBRARY_RELEASE)
-        list(APPEND Thea_DEPS_LIBRARIES optimized ${GMP_LIBRARY_RELEASE})
+      # Create an imported target for GMP so the export uses a target name, not absolute paths
+      if(NOT TARGET Thea::GMP)
+        add_library(Thea::GMP UNKNOWN IMPORTED GLOBAL)
+        if(GMP_LIBRARY_RELEASE)
+          set_target_properties(Thea::GMP PROPERTIES
+            IMPORTED_LOCATION "${GMP_LIBRARY_RELEASE}"
+          )
+        endif()
+        if(GMP_LIBRARY_DEBUG)
+          set_property(TARGET Thea::GMP PROPERTY IMPORTED_LOCATION_DEBUG "${GMP_LIBRARY_DEBUG}")
+        endif()
+        if(GMP_INCLUDE_DIR)
+          set_target_properties(Thea::GMP PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES "${GMP_INCLUDE_DIR}"
+          )
+        endif()
       endif()
-      if(GMP_LIBRARY_DEBUG)
-        list(APPEND Thea_DEPS_LIBRARIES debug ${GMP_LIBRARY_DEBUG})
-      endif()
+      list(APPEND Thea_DEPS_LIBRARIES Thea::GMP)
     ENDIF()
 
     # CGAL appends the directory containing its own CMake modules to the module search path. We shouldn't need it after this
@@ -154,8 +166,28 @@ IF(WITH_FREEIMAGE AND Thea_FIND_FreeImage)
   FIND_PACKAGE(FreeImage)
 
   IF(FreeImage_FOUND)
-    SET(Thea_DEPS_LIBRARIES ${Thea_DEPS_LIBRARIES} ${FreeImage_LIBRARIES})
-    SET(Thea_DEPS_INCLUDE_DIRS ${Thea_DEPS_INCLUDE_DIRS} ${FreeImage_INCLUDE_DIRS})
+    # Create an imported target for FreeImage so the export uses a target name, not absolute paths
+    if(NOT TARGET Thea::FreeImage)
+      add_library(Thea::FreeImage UNKNOWN IMPORTED GLOBAL)
+      if(MSVC AND FreeImage_RELEASE_LIBRARY)
+        set_target_properties(Thea::FreeImage PROPERTIES
+          IMPORTED_LOCATION "${FreeImage_RELEASE_LIBRARY}"
+        )
+        if(FreeImage_DEBUG_LIBRARY)
+          set_property(TARGET Thea::FreeImage PROPERTY IMPORTED_LOCATION_DEBUG "${FreeImage_DEBUG_LIBRARY}")
+        endif()
+      elseif(FreeImage_LIBRARIES)
+        set_target_properties(Thea::FreeImage PROPERTIES
+          IMPORTED_LOCATION "${FreeImage_LIBRARIES}"
+        )
+      endif()
+      if(FreeImage_INCLUDE_DIRS)
+        set_target_properties(Thea::FreeImage PROPERTIES
+          INTERFACE_INCLUDE_DIRECTORIES "${FreeImage_INCLUDE_DIRS}"
+        )
+      endif()
+    endif()
+    SET(Thea_DEPS_LIBRARIES ${Thea_DEPS_LIBRARIES} Thea::FreeImage)
     SET(Thea_DEPS_CFLAGS "${Thea_DEPS_CFLAGS} -DTHEA_ENABLE_FREEIMAGE=1")
   ELSE()  # this is not a fatal error
     MESSAGE(STATUS "FreeImage not found: library will be built without FreeImage image codecs")
