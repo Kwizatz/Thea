@@ -53,7 +53,8 @@ class /* THEA_API */ ProximityQueryStructureN
          * elements. A negative value for any field implies it has not been initialized.
          */
         NeighborPair(intx query_index_ = -1, intx target_index_ = -1, double mon_approx_dist_ = -1)
-        : query_index(query_index_), target_index(target_index_), mon_approx_dist(mon_approx_dist_)
+        : query_index(query_index_), target_index(target_index_), mon_approx_dist(mon_approx_dist_),
+          query_point(VectorT::Zero()), target_point(VectorT::Zero())
         {}
 
         /**

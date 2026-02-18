@@ -78,7 +78,7 @@ typedef BvhN<IndexedTriangle, 3, Real, NodeAttribute> TriangleBvh;
 // A data structure to hold the integral terms.
 struct IntegralData
 {
-  IntegralData() : I(0), I_phi(0), dI(0), dI_phi(0) {}
+  IntegralData() : I(0), I_phi(0), dI(Vector3d::Zero()), dI_phi(Vector3d::Zero()) {}
 
   IntegralData(double i, double i_phi, Vector3d const & di, Vector3d const & di_phi)
   : I(i), I_phi(i_phi), dI(di), dI_phi(di_phi) {}
